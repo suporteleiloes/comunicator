@@ -1,4 +1,4 @@
-import WebsocketInterface from './websocket.js'
+const WebsocketInterface = require('./websocket.js')
 
 /**
  * Comunicador v2.0.0
@@ -435,4 +435,6 @@ const Comunicator = (function () {
 
 })();
 
-export default Comunicator
+if (typeof module !== 'undefined') {
+  module.exports = Comunicator;
+}

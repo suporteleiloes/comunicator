@@ -1,12 +1,25 @@
 class Comunicator {
-  constructor (api, gateway, comunicator) {
-    this.api = api;
+  constructor (gateway, comunicator, axiosInstance) {
+    this.gatewayEnv = gateway;
     this.comunicator = comunicator;
+    this.http = axiosInstance
   }
 
-  lance (loteId, valor){
-    console.log('Lance ', loteId, valor)
+  lance (loteId, valor) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`/api/lote/${loteId}/lance`, {
+        valor: valor
+      })
+        .then(response => {
+
+        })
+        .catch(error => {
+
+        })
+    });
   }
 }
 
-export default Comunicator
+if (typeof module !== 'undefined') {
+  module.exports = Comunicator;
+}

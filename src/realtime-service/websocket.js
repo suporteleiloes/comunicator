@@ -5,7 +5,7 @@ class WebsocketInterface {
       console.error('Browser does not support Websocket protocol')
       return
     }
-    this._comunicator = WebSocket;
+    this._comunicator = new WebSocket(uri);
   }
 
   driver () {
@@ -13,4 +13,6 @@ class WebsocketInterface {
   }
 }
 
-export default WebsocketInterface
+if (typeof module !== 'undefined') {
+  module.exports = WebsocketInterface;
+}

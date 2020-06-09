@@ -1,0 +1,19 @@
+{
+  "name": "comunicator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Realtime service for Suporte Leiloes",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.wtis.com.br/suporteleiloes/comunicator"
+  },
+  "author": "Tiago Felipe",
+  "license": "ISC",
+  "devDependencies": {
+    "ws": "^7.3.0"
+  }
+}

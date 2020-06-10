@@ -33,7 +33,6 @@ let ws = com.comunicator.connect('ws://localhost:8888/ws', {}, WSDriver)
 //
 const prompt = require('prompt');
 var colors = require("colors/safe");
-prompt.start();
 function onErr(err) {
   // console.log(err);
   return 1;
@@ -47,6 +46,7 @@ ws.on('com/connect', (env) => {
 
   // com.lance(1, 2400);
   setTimeout(() => {
+    prompt.start();
     ask()
   }, 300)
 });
@@ -66,14 +66,17 @@ const ask = function () {
   console.log('8 ', colors.green('................ Status lote'))
   console.log('9 ', colors.green('................ Status leilão'))
   console.log('10', colors.green('................ Alterar cronômetro lote'))
+  console.log('10', colors.green('................ Alterar cronômetro leilão'))
   console.log('11', colors.green('................ Pausar leilão'))
   console.log('12', colors.green('................ Retomar leilão'))
-  console.log('13', colors.green('................ Avisar arrematantes'))
+  console.log('13', colors.green('................ Enviar Aviso para Auditório Virtual'))
+  console.log('14', colors.green('................ Alteração em incremento do lote'))
+  console.log('14', colors.green('................ Alteração em valor inicial do lote'))
   console.log('14', colors.green('................ Alteração em lote'))
   console.log('15', colors.green('................ Alteração em leilão'))
   console.log('16', colors.green('................ Alteração status de usuário'))
   console.log('17', colors.green('................ Mensagem de usuário'))
-  console.log('18', colors.green('................ Login de usuário'))
+  console.log('18', colors.green('................ Login de usuário')) //
   console.log('19', colors.green('................ Timeout/logout de usuário'))
   prompt.get([
     {

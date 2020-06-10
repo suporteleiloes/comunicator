@@ -287,12 +287,76 @@ const Actions = {
     return data;
   },
 
+  /**
+   * Quando o status de um usuário é alterado
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  usuario: {Integer}
+   *  status: {Integer}
+   * }
+   */
+  alteracaoStatusUsuario: (data) => {
+    return data;
+  },
 
+  /**
+   * Quando um usuário recebe uma mensagem
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  from: {
+   *    id: {Integer},
+   *    username: {String},
+   *    name: {String},
+   *  },
+   *  to: {
+   *    id: {Integer},
+   *    username: {String},
+   *    name: {String},
+   *  }
+   *  subject: {String},
+   *  message: {String},
+   * }
+   */
+  onMessageReceive: (data) => {
+    return data;
+  },
 
+  /**
+   * Quando um usuário faz login ou entra em uma tela específica
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  user: {Integer}
+   *  type: {String} (login|screen)
+   *  screen: {String},
+   *  date: {Datetime}
+   * }
+   */
+  onLogin: (data) => {
+    return data;
+  },
 
-
-
-
+  /**
+   * Quando um usuário faz logout ou sai de uma tela específica
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  user: {Integer}
+   *  type: {String} (login|screen)
+   *  screen: {String},
+   *  date: {Datetime},
+   *  reason: {String}
+   * }
+   */
+  onLogout: (data) => {
+    return data;
+  },
 
   /**
    * Quando um comitente toma uma decisão de aprovar, rejeitar ou condicionar um lance em um determinado lote.
@@ -304,7 +368,8 @@ const Actions = {
    *  lote: {
    *    id: {Integer}
    *    status: {Integer}
-   *  }
+   *  },
+   *  mensagem: {String}
    */
   comitenteDecisaoStatusLote: (data) => {
     return data;

@@ -1,5 +1,10 @@
 const WebsocketInterface = require('./websocket.js')
 const actions = require('./actions.js')
+let _log = () => void (0)
+if (process) {
+  _log = require('../helpers/log.js')
+  _log = _log('dev')
+}
 
 /**
  * Comunicador v2.0.0
@@ -54,7 +59,7 @@ const Comunicator = (function () {
      * Reliable events
      * @type int
      */
-    this._events = ["com/connect", "com/disconnect", "com/error"];
+    this._events = ['com/connect', 'com/disconnect', 'com/error'];
 
     /**
      * Class for Comunication provider
@@ -77,11 +82,11 @@ const Comunicator = (function () {
 
     this.on('com/connect', (env) => {
       clearInterval(this._intervalAttempts);
-      console.log('Comunicator connection re-establish');
+      _log('Comunicator connection re-establish');
     });
     this.on('com/disconnect', (env) => {
-      if (this._closedByUser){
-        console.log('Closed by user. No need to reconnect');
+      if (this._closedByUser) {
+        _log('Closed by user. No need to reconnect');
         return;
       }
       // let hasLimit = _maxAttempts !== null
@@ -89,9 +94,9 @@ const Comunicator = (function () {
       this._intervalAttempts = setInterval(() => {
 
         if (this._maxAttempts === null) {
-          console.log('Comunicator connection lost, attempt to reconnect: ' + this._attempts + ' attempt');
+          _log('Comunicator connection lost, attempt to reconnect: ' + this._attempts + ' attempt');
         } else {
-          console.log('Comunicator connection lost, attempt to reconnect: ' + this._attempts + ' of ' + this._maxAttempts);
+          _log('Comunicator connection lost, attempt to reconnect: ' + this._attempts + ' of ' + this._maxAttempts);
         }
 
         this._attempts = this._attempts + 1;
@@ -112,19 +117,18 @@ const Comunicator = (function () {
 
     if (!this._hasSupport) {
       //throw new Error('Browser no support realtime comunication provider');
-      console.log('Browser no support realtime comunication provider');
+      _log('Browser no support realtime comunication provider');
       return;
     }
 
-    console.log(`Connecting to ${this._uri}`)
+    _log(`Connecting to ${this._uri}`)
 
     let com
     try {
       let service = new this._comunicator(this._uri, this._config);
       com = service.driver()
-    }
-    catch (e) {
-      console.log(e.message);
+    } catch (e) {
+      _log(e.message);
       this.fire({type: 'com/disconnect', data: {code: 0, reason: e.message}});
       return;
     }
@@ -192,7 +196,7 @@ const Comunicator = (function () {
       event.target = this;
     }
 
-    console.log('Fire event ' + event.type + ' whith data: ', event.data)
+    _log('Fire event ' + event.type + ' whith data: ', null, event.data)
 
     if (!event.type) {
       throw new Error('Event object missing *type* property.');
@@ -230,9 +234,9 @@ const Comunicator = (function () {
    * @param Mixed data
    */
   Comunication.prototype.parseMessage = function (_event) {
-    console.log('Message received: ', _event)
+    _log('Message received: ', null, _event)
     if (typeof _event['data'] === 'undefined') {
-      console.log('Event without data');
+      _log('Event without data');
       return;
     }
 
@@ -240,23 +244,23 @@ const Comunicator = (function () {
     try {
       event = JSON.parse(_event.data)
     } catch (e) {
-      console.log('Invalid message, ignoring comunication. Reason: Message must be a valid JSON');
+      _log('Invalid message, ignoring comunication. Reason: Message must be a valid JSON');
       return;
     }
 
     if (typeof event['type'] === 'undefined') {
-      console.log('Invalid event, propert *type* is not defined');
+      _log('Invalid event, propert *type* is not defined');
       return;
     }
 
     // Verify if is an valid event
     if (typeof actions[event.type] === 'undefined') {
-      console.log(`Event *${event.type}* not found`);
+      _log(`Event *${event.type}* not found`);
       return;
     }
 
     if (typeof event['data'] === 'undefined') {
-      console.log('Event without data');
+      _log('Event without data');
       return;
     }
 

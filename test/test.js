@@ -7,7 +7,7 @@ const login = require('./libs/login')
 async function application () {
 
   try {
-    const session = await login('tiagofelipe', '161400')
+    const session = await login('tiagofelipe', '161400') // TODO: Move to config
   } catch (e) {
     console.log('Falha ao tentar login na API', e.message)
     return
@@ -58,28 +58,6 @@ async function application () {
   const testCommands = [
     {
       cmd: '1',
-      description: 'Lance',
-      test () {
-        return new Promise((resolve, reject) => {
-          console.log()
-          console.log()
-          console.log(colors.bold('................ Testando sistema de lances: '))
-          console.log(colors.bgYellow(colors.black('Efetuando lance no valor de R$ 2.400,00 para o lote de ID 1...')))
-          com.lance(1, 2400)
-            .then(response => {
-              resolve(response.data)
-            })
-            .catch(error => {
-              reject(error.data || error)
-            });
-        })
-
-
-      }
-    },
-
-    {
-      cmd: '4',
       description: 'Abrir leilão',
       test () {
         return new Promise((resolve, reject) => {
@@ -98,7 +76,51 @@ async function application () {
 
 
       }
-    }
+    },
+
+    {
+      cmd: '2',
+      description: 'Fechar leilão',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testando fechamento de leilão: '))
+          console.log(colors.bgYellow(colors.black('Fechando leilão de ID 1...')))
+          com.fecharLeilao(1)
+            .then(response => {
+              resolve(response.data)
+            })
+            .catch(error => {
+              reject(error.data || error)
+            });
+        })
+
+
+      }
+    },
+
+    {
+      cmd: '3',
+      description: 'Lance',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testando sistema de lances: '))
+          console.log(colors.bgYellow(colors.black('Efetuando lance no valor de R$ 2.400,00 para o lote de ID 1...')))
+          com.lance(55, 100000)
+            .then(response => {
+              resolve(response.data)
+            })
+            .catch(error => {
+              reject(error.data || error)
+            });
+        })
+
+
+      }
+    },
   ]
 
   const ask = function () {
@@ -152,7 +174,9 @@ async function application () {
       try {
         console.log(find)
         let success = await find.test()
-        console.log(colors.bgGreen(colors.bold(colors.black('Teste OK!'))))
+        console.log(colors.bgGreen(colors.bold(colors.black(' Teste OK! '))))
+        console.log()
+        console.log()
       } catch (e) {
         console.log(colors.bgRed(colors.white(colors.bold(`Teste: ${find.description} not success. Reason: `), e.message)));
         console.log(e)

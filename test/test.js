@@ -228,6 +228,50 @@ async function application () {
 
 
       }
+    },
+
+    {
+      cmd: '11',
+      description: 'Mudar Status de lote',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testar mudança de status de lote: '))
+          console.log(colors.green('1 ............. Aberto para lances '))
+          prompt.get([
+            {
+              name: 'status',
+              description: 'Qual status você deseja testar?',
+              type: 'string',
+              required: true
+            },
+            {
+              name: 'lote',
+              description: 'Qual id do lote?',
+              type: 'string',
+              required: true
+            }
+          ], async function (err, result) {
+            if (err) {
+              return onErr(err);
+            }
+
+            console.log(colors.bold('................ Testando alteração de status de lote '))
+            console.log(colors.bgYellow(colors.black(`Efetuando alteração do lote com ID ${result.lote}...`)))
+            com.alterarStatusLote(result.lote, result.status)
+              .then(response => {
+                resolve(response.data)
+              })
+              .catch(error => {
+                reject(error.data || error)
+              });
+
+          })
+        })
+
+
+      }
     }
   ]
 
@@ -245,7 +289,7 @@ async function application () {
     console.log('4 ', colors.green('................ Abrir leilão')) ok
     console.log('5 ', colors.green('................ Fechar leilão')) ok
     console.log('6 ', colors.green('................ Renovar cronômetro'))
-    console.log('7 ', colors.green('................ Mudar lote'))
+    console.log('7 ', colors.green('................ Mudar lote')) ok
     console.log('8 ', colors.green('................ Status lote'))
     console.log('9 ', colors.green('................ Status leilão'))
     console.log('10', colors.green('................ Alterar cronômetro lote'))

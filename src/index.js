@@ -9,7 +9,7 @@ class Comunicator {
    * Efetua um novo lance
    * @param loteId
    * @param valor
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   lance (loteId, valor) {
     return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ class Comunicator {
   /**
    * Deleta todos os lances de um lote
    * @param loteId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   deleteLancesLote (loteId) {
     return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ class Comunicator {
   /**
    * Deleta um lance
    * @param lanceId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   deleteLance (lanceId) {
     return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ class Comunicator {
   /**
    * Abrir um leilão
    * @param leilaoId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   abrirLeilao (leilaoId) {
     return new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ class Comunicator {
   /**
    * Fecha um leilão
    * @param leilaoId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   fecharLeilao (leilaoId) {
     return new Promise((resolve, reject) => {
@@ -96,7 +96,7 @@ class Comunicator {
   /**
    * Renovar cronômetro de lote em pregão
    * @param loteId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   renovarCronometro (loteId) {
     return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ class Comunicator {
    * @param leilaoId
    * @param comando (passar, voltar, irPara)
    * @param numero
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   mudarLote (leilaoId, comando = 'passar', numero = '') {
     return new Promise((resolve, reject) => {
@@ -133,7 +133,7 @@ class Comunicator {
    * Altera status do lote
    * @param loteId
    * @param status
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   alterarStatusLote (loteId, status) {
     return new Promise((resolve, reject) => {
@@ -153,7 +153,7 @@ class Comunicator {
    * Altera tempo do cronômetro do lote
    * @param loteId
    * @param novoTempo
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   alterarCronometroLote (loteId, novoTempo) {
     return new Promise((resolve, reject) => {
@@ -173,7 +173,7 @@ class Comunicator {
    * Altera status do leilão
    * @param leilaoId
    * @param status
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   alterarStatusLeilao (leilaoId, status) {
     return new Promise((resolve, reject) => {
@@ -193,7 +193,7 @@ class Comunicator {
    * Pausa temporariamente um leilão
    * @param leilaoId
    * @param motivo
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   pausaLeilao (leilaoId, motivo = null) {
     return new Promise((resolve, reject) => {
@@ -212,7 +212,7 @@ class Comunicator {
   /**
    * Retoma um leilão pausado
    * @param leilaoId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   retomarLeilao (leilaoId) {
     return new Promise((resolve, reject) => {
@@ -232,7 +232,7 @@ class Comunicator {
    * @param mensagem
    * @param leilaoId
    * @param usuarioId
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   enviarAvisoAuditorioVirtual (mensagem, leilaoId = null, usuarioId = null) {
     return new Promise((resolve, reject) => {
@@ -254,7 +254,7 @@ class Comunicator {
    * Notifica alterações em lote para mudança em tempo real
    * @param loteId
    * @param novosDados
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   notificaAlteracaoLote (loteId, novosDados) {
     return new Promise((resolve, reject) => {
@@ -272,7 +272,7 @@ class Comunicator {
    * Notifica alterações em leilão para mudança em tempo real
    * @param leilaoId
    * @param novosDados
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   notificaAlteracaoLeilao (leilaoId, novosDados) {
     return new Promise((resolve, reject) => {
@@ -290,7 +290,7 @@ class Comunicator {
    * Notifica alterações em status de usuário para bloqueio/aprovação em tempo real
    * @param usuarioId
    * @param novoStatus
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   notificaAlteracaoStatusUsuario (usuarioId, novoStatus) {
     return new Promise((resolve, reject) => {
@@ -311,7 +311,7 @@ class Comunicator {
    * @param toUserId
    * @param message
    * @param subject
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   sendChatMessage (toUserId, message, subject = null) {
     return new Promise((resolve, reject) => {
@@ -335,7 +335,7 @@ class Comunicator {
 
   /**
    * Informa de um logout para evitar açõo do timeout e consistência na informação de conectados.
-   * @returns {Promise<unknown>}
+   * @returns {Promise<>}
    */
   userLogout () {
     return new Promise((resolve, reject) => {

@@ -32,7 +32,7 @@ class Comunicator {
    */
   deleteLancesLote (loteId) {
     return new Promise((resolve, reject) => {
-      this.http.delete(`/api/lotes/${loteId}/lances`)
+      this.http.delete(`/api/cmd/lotes/${loteId}/lances`)
         .then(response => {
           resolve(response)
         })
@@ -49,7 +49,7 @@ class Comunicator {
    */
   deleteLance (lanceId) {
     return new Promise((resolve, reject) => {
-      this.http.delete(`/api/lances/${lanceId}`)
+      this.http.delete(`/api/cmd/lances/${lanceId}`)
         .then(response => {
           resolve(response)
         })

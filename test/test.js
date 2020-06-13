@@ -121,6 +121,114 @@ async function application () {
 
       }
     },
+
+    {
+      cmd: '4',
+      description: 'Deletar Lance',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testando remoção de lance: '))
+          console.log(colors.bgYellow(colors.black(`Efetuando remoção do lance com ID ${5}...`)))
+          com.deleteLance(5)
+            .then(response => {
+              resolve(response.data)
+            })
+            .catch(error => {
+              reject(error.data || error)
+            });
+        })
+
+
+      }
+    },
+
+    {
+      cmd: '5',
+      description: 'Zerar lances de lote',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testando remoção de todos os lances de um lote: '))
+          console.log(colors.bgYellow(colors.black(`Efetuando remoção dos lances do lote com ID ${55}...`)))
+          com.deleteLancesLote(55)
+            .then(response => {
+              resolve(response.data)
+            })
+            .catch(error => {
+              reject(error.data || error)
+            });
+        })
+
+
+      }
+    },
+
+    {
+      cmd: '10',
+      description: 'Mudar lote',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testar passagem de lote: '))
+          console.log(colors.green('1 ............. Ir para número '))
+          console.log(colors.green('2 ............. Passar para o próximo '))
+          console.log(colors.green('3 ............. Voltar para o anterior '))
+          prompt.get([
+            {
+              name: 'acao',
+              description: 'Qual comando você deseja testar?',
+              type: 'string',
+              required: true
+            }
+          ], async function (err, result) {
+            if (err) {
+              return onErr(err);
+            }
+
+            let cb = (comando, numero) => {
+              console.log(colors.bold('................ Testando passagem de lote '))
+              console.log(colors.bgYellow(colors.black(`Efetuando remoção dos lances do lote com ID ${55}...`)))
+              com.mudarLote(1, comando, numero)
+                .then(response => {
+                  resolve(response.data)
+                })
+                .catch(error => {
+                  reject(error.data || error)
+                });
+            }
+
+            if (String(result.acao) === '1') {
+              prompt.get([
+                {
+                  name: 'numero',
+                  description: 'Digite o número do lote:',
+                  type: 'string',
+                  required: true
+                }
+              ], async function (err, result) {
+                if (err) {
+                  return onErr(err);
+                }
+                cb('ir', result.numero)
+              })
+            } else if (String(result.acao) === '2') {
+              cb('passar')
+            } else if (String(result.acao) === '3') {
+              cb('voltar')
+            } else {
+              return onErr(err);
+            }
+
+          })
+        })
+
+
+      }
+    }
   ]
 
   const ask = function () {
@@ -129,13 +237,13 @@ async function application () {
     console.log(colors.green('+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+='))
     console.log()
     testCommands.map((command => {
-      console.log(`${command.cmd} `, colors.green(`................ ${command.description}`))
+      console.log(`${String(command.cmd).padEnd(4)} `, colors.green(`................ ${command.description}`))
     }))
-    /*console.log('1 ', colors.green('................ Lance'))
-    console.log('2 ', colors.green('................ Deletar Lance'))
-    console.log('3 ', colors.green('................ Zerar lances de lote'))
-    console.log('4 ', colors.green('................ Abrir leilão'))
-    console.log('5 ', colors.green('................ Fechar leilão'))
+    /*console.log('1 ', colors.green('................ Lance')) ok
+    console.log('2 ', colors.green('................ Deletar Lance')) ok
+    console.log('3 ', colors.green('................ Zerar lances de lote')) ok
+    console.log('4 ', colors.green('................ Abrir leilão')) ok
+    console.log('5 ', colors.green('................ Fechar leilão')) ok
     console.log('6 ', colors.green('................ Renovar cronômetro'))
     console.log('7 ', colors.green('................ Mudar lote'))
     console.log('8 ', colors.green('................ Status lote'))

@@ -177,9 +177,7 @@ class Comunicator {
    */
   alterarStatusLeilao (leilaoId, status) {
     return new Promise((resolve, reject) => {
-      this.http.post(`/api/cmd/leiloes/${leilaoId}/status`, {
-        status: status
-      })
+      this.http.post(`/api/leiloes/${leilaoId}/status/${status}`)
         .then(response => {
           resolve(response)
         })

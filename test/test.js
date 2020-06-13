@@ -272,6 +272,50 @@ async function application () {
 
 
       }
+    },
+
+    {
+      cmd: '12',
+      description: 'Mudar Status de Leilão',
+      test () {
+        return new Promise((resolve, reject) => {
+          console.log()
+          console.log()
+          console.log(colors.bold('................ Testar mudança de status de leilão: '))
+          // console.log(colors.green('1 ............. Aberto para lances '))
+          prompt.get([
+            {
+              name: 'status',
+              description: 'Qual status você deseja testar?',
+              type: 'string',
+              required: true
+            },
+            {
+              name: 'leilao',
+              description: 'Qual id do leilão?',
+              type: 'string',
+              required: true
+            }
+          ], async function (err, result) {
+            if (err) {
+              return onErr(err);
+            }
+
+            console.log(colors.bold('................ Testando alteração de status de leilão '))
+            console.log(colors.bgYellow(colors.black(`Efetuando alteração do leilão com ID ${result.leilao}...`)))
+            com.alterarStatusLeilao(result.leilao, result.status)
+              .then(response => {
+                resolve(response.data)
+              })
+              .catch(error => {
+                reject(error.data || error)
+              });
+
+          })
+        })
+
+
+      }
     }
   ]
 
@@ -290,7 +334,7 @@ async function application () {
     console.log('5 ', colors.green('................ Fechar leilão')) ok
     console.log('6 ', colors.green('................ Renovar cronômetro'))
     console.log('7 ', colors.green('................ Mudar lote')) ok
-    console.log('8 ', colors.green('................ Status lote'))
+    console.log('8 ', colors.green('................ Status lote')) ok
     console.log('9 ', colors.green('................ Status leilão'))
     console.log('10', colors.green('................ Alterar cronômetro lote'))
     console.log('11', colors.green('................ Alterar cronômetro leilão'))
@@ -324,7 +368,7 @@ async function application () {
         return;
       }
       try {
-        console.log(find)
+        // console.log(find)
         let success = await find.test()
         console.log(colors.bgGreen(colors.bold(colors.black(' Teste OK! '))))
         console.log()

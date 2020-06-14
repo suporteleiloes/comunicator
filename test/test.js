@@ -107,15 +107,42 @@ async function application () {
         return new Promise((resolve, reject) => {
           console.log()
           console.log()
-          console.log(colors.bold('................ Testando sistema de lances: '))
-          console.log(colors.bgYellow(colors.black('Efetuando lance no valor de R$ 2.400,00 para o lote de ID 1...')))
-          com.lance(55, 100000)
-            .then(response => {
-              resolve(response.data)
-            })
-            .catch(error => {
-              reject(error.data || error)
-            });
+          prompt.get([
+            {
+              name: 'valor',
+              description: 'Qual valor do lance?',
+              type: 'string',
+              required: true
+            },
+            {
+              name: 'lote',
+              description: 'Qual id do lote?',
+              type: 'string',
+              required: true
+            },
+            {
+              name: 'apelido',
+              description: 'Qual apelido fará o lance?',
+              type: 'string',
+              default: 'tiagofelipe1',
+              required: true
+            }
+          ], async function (err, result) {
+            if (err) {
+              return onErr(err);
+            }
+
+            console.log(colors.bold('................ Testando sistema de lances: '))
+            console.log(colors.bgYellow(colors.black(`Efetuando lance no valor de R$ ${result.valor} para o lote de ID ${result.lote} em nome de R{${result.apelido}...`)))
+            com.lance(result.lote, result.valor, result.apelido)
+              .then(response => {
+                resolve(response.data)
+              })
+              .catch(error => {
+                reject(error.data || error)
+              });
+
+          })
         })
 
 

@@ -268,6 +268,22 @@ const Comunicator = (function () {
 
   };
 
+  /**
+   * Subscribe in an topic
+   * @param {String} topic
+   */
+  Comunication.prototype.subscribe = function (topic) {
+    _log(`Subscribe on topic ${topic}`, 1);
+  };
+
+  /**
+   * Unsubscribe in an topic
+   * @param {String} topic
+   */
+  Comunication.prototype.unsubscribe = function (topic) {
+    _log(`Unsubscribe on topic ${topic}`, 1);
+  };
+
   return {
     connect: function (uri, config, driver) {
       return new Comunication(uri, config, driver);

@@ -335,7 +335,7 @@ async function application () {
     console.log('6 ', colors.green('................ Renovar cronômetro'))
     console.log('7 ', colors.green('................ Mudar lote')) ok
     console.log('8 ', colors.green('................ Status lote')) ok
-    console.log('9 ', colors.green('................ Status leilão'))
+    console.log('9 ', colors.green('................ Status leilão')) ok
     console.log('10', colors.green('................ Alterar cronômetro lote'))
     console.log('11', colors.green('................ Alterar cronômetro leilão'))
     console.log('12', colors.green('................ Pausar leilão'))

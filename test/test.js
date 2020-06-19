@@ -156,15 +156,29 @@ async function application () {
         return new Promise((resolve, reject) => {
           console.log()
           console.log()
-          console.log(colors.bold('................ Testando remoção de lance: '))
-          console.log(colors.bgYellow(colors.black(`Efetuando remoção do lance com ID ${5}...`)))
-          com.deleteLance(5)
-            .then(response => {
-              resolve(response.data)
-            })
-            .catch(error => {
-              reject(error.data || error)
-            });
+          prompt.get([
+            {
+              name: 'lance',
+              description: 'Qual id do lance?',
+              type: 'string',
+              required: true
+            }
+          ], async function (err, result) {
+            if (err) {
+              return onErr(err);
+            }
+
+            console.log(colors.bold('................ Testando remoção de lance: '))
+            console.log(colors.bgYellow(colors.black(`Efetuando remoção do lance com ID ${result.lance}...`)))
+            com.deleteLance(result.lance)
+              .then(response => {
+                resolve(response.data)
+              })
+              .catch(error => {
+                reject(error.data || error)
+              });
+
+          })
         })
 
 

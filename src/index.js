@@ -1,8 +1,11 @@
+const audios = require('./libs/audioNotifications.js')
+
 class Comunicator {
   constructor (gateway, comunicator, axiosInstance) {
     this.gatewayEnv = gateway;
     this.comunicator = comunicator;
     this.http = axiosInstance
+    this.audios = audios
   }
 
   /**

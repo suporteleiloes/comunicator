@@ -3,5 +3,11 @@ export default {
     return {
       lote: null
     }
+  },
+  computed: {
+
+  },
+  methods: {
+
   }
 }

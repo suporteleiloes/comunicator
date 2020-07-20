@@ -4,7 +4,8 @@
   "description": "Realtime service for Suporte Leiloes",
   "main": "src/index.js",
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "test-vue": "node test/test-vue.js"
   },
   "repository": {
     "type": "git",

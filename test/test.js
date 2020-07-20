@@ -7,7 +7,7 @@ const login = require('./libs/login')
 async function application () {
 
   try {
-    const session = await login('tiagofelipe', '161400') // TODO: Move to config
+    const session = await login('slroot', '161400') // TODO: Move to config
   } catch (e) {
     console.log('Falha ao tentar login na API', e.message)
     return
@@ -133,7 +133,7 @@ async function application () {
             }
 
             console.log(colors.bold('................ Testando sistema de lances: '))
-            console.log(colors.bgYellow(colors.black(`Efetuando lance no valor de R$ ${result.valor} para o lote de ID ${result.lote} em nome de R{${result.apelido}...`)))
+            console.log(colors.bgYellow(colors.black(`Efetuando lance no valor de R$ ${result.valor} para o lote de ID ${result.lote} em nome de ${result.apelido}...`)))
             com.lance(result.lote, result.valor, result.apelido)
               .then(response => {
                 resolve(response.data)
@@ -429,3 +429,4 @@ async function application () {
 }
 
 application();
+const vue = require('./test-vue.js')

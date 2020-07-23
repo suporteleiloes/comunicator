@@ -25,8 +25,27 @@ const Mixin = {
       // this.comunicator.off('lance', this.onLance)
       isBinded = false
     },
-    bindMessage (data) {
-      console.log('Bind message interceptor', data)
+    bindMessage (event) {
+      console.log('Bind message interceptor', event)
+      let data
+      try {
+        data = JSON.parse(event.data)
+      } catch (e) {
+        console.log('Invalid message, ignoring comunication. Reason: Message must be a valid JSON')
+        return
+      }
+      if (this.hasNotify(data)) {
+        this['notify_' + this.notifyType(data)] && this['notify_' + this.notifyType(data)](data)
+      }
+    },
+    hasNotify (event) {
+      return event && event.notify
+    },
+    notifyType (event) {
+      if (event && event.notify && event.notify.type) {
+        return event.notify.type
+      }
+      return null
     }
   }
 }

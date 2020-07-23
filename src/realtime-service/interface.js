@@ -62,6 +62,12 @@ const Comunicator = (function () {
     this._events = ['com/connect', 'com/disconnect', 'com/error'];
 
     /**
+     * Interceptors message
+     * @type {*[]}
+     */
+    this._interceptors = [];
+
+    /**
      * Class for Comunication provider
      */
     if (typeof ComunicatorInterface !== 'undefined') {
@@ -235,6 +241,11 @@ const Comunicator = (function () {
    */
   Comunication.prototype.parseMessage = function (_event) {
     _log('Message received: ', null, _event)
+    if (this.interceptors && this.interceptors.length) {
+      this.interceptors.map(fcn => {
+        fcn && fcn(_event)
+      })
+    }
     if (typeof _event['data'] === 'undefined') {
       _log('Event without data');
       return;

@@ -241,8 +241,8 @@ const Comunicator = (function () {
    */
   Comunication.prototype.parseMessage = function (_event) {
     _log('Message received: ', null, _event)
-    if (this.interceptors && this.interceptors.length) {
-      this.interceptors.map(fcn => {
+    if (this._interceptors && this._interceptors.length) {
+      this._interceptors.map(fcn => {
         fcn && fcn(_event)
       })
     }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Status = require('../../../helpers/LoteStatus')
 const Events = require('./bindEventListeners')
 
@@ -61,6 +62,16 @@ const Component = {
     }
   },
   methods: {
+    /**
+     * Verifica se a comunicação recebida do realtime é relacionada ao leilão renderizado em tela
+     * @param data
+     * @returns {boolean}
+     */
+    isLeilaoComunication (data) {
+      if (!data || !data.leilao || !data.leilao.id) return false
+      if (!this.leilao) return false
+      return data.leilao.id === this.leilao.id
+    },
     /**
      * Verifica se a comunicação recebida do realtime é relacionada ao lote renderizado em tela
      * @param loteId
@@ -147,6 +158,15 @@ const Component = {
      */
     lanceIncrementoMultiplo (n) {
       return this.valorAtual + (this.valorIncremento5x * Number(n))
+    },
+    /**
+     * Quando um leilão é aberto (auditório virtual)
+     * @param data
+     * @private
+     */
+    __abrirLeilao (data) {
+      if (!this.isLeilaoComunication(data)) return
+      this.leilao = Object.assign({}, this.leilao, data.leilao)
     }
   }
 }

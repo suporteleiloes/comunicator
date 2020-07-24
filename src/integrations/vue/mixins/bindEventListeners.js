@@ -52,6 +52,12 @@ const Mixin = {
       })
       isBinded = false
     },
+    onAberturaLeilao (data) {
+      this.__abrirLeilao && this.__abrirLeilao(data)
+    },
+    onEncerramentoLeilao (data) {
+      this.__encerrarLeilao && this.__encerrarLeilao(data)
+    },
     onLance (data) {
       this.__parseLance && this.__parseLance((data.lote ? data.lote.id : data.lote), data)
     },
@@ -60,12 +66,6 @@ const Mixin = {
     },
     onLancesZerados (data) {
       this.__zeraLances && this.__zeraLances(data)
-    },
-    onAberturaLeilao (data) {
-      this.__abrirLeilao && this.__abrirLeilao(data)
-    },
-    onEncerramentoLeilao (data) {
-      this.__encerrarLeilao && this.__encerrarLeilao(data)
     },
     onRenovarCronometro (data) {
       this.__renovarCronometro && this.__renovarCronometro(data)

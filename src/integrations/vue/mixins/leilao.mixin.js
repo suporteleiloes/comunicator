@@ -1,11 +1,14 @@
 /* eslint-disable */
 const Status = require('../../../helpers/LoteStatus')
 const Events = require('./bindEventListeners')
+const Cronometro = require('./ext/cronometro.mixin')
+const Lote = require('./ext/lote.mixin')
 
 const Component = {
-  mixins: [Events],
+  mixins: [Events, Cronometro, Lote],
   data () {
     return {
+      leilao: null,
       lote: null,
       hasPregao: false,
       hasNovoLance: false,
@@ -33,14 +36,20 @@ const Component = {
       }
       return this.lote.lances[0]
     },
+    lanceLocalidade () {
+      if (this.ultimoLance){
+        return `${this.ultimoLance.autor.cidade} - ${this.ultimoLance.autor.uf}`
+      }
+      return null
+    },
     valorAtual () {
       if (!this.ultimoLance) {
         if (!this.lote.valorInicial) {
           return 0
         }
-        return this.lote.valorInicial
+        return Number(this.lote.valorInicial)
       }
-      return this.ultimoLance.valor
+      return Number(this.ultimoLance.valor)
     },
     lanceMinimo () {
       if (!this.lote.valorInicial) {
@@ -68,9 +77,13 @@ const Component = {
      * @returns {boolean}
      */
     isLeilaoComunication (data) {
-      if (!data || !data.leilao || !data.leilao.id) return false
+      let _data = data
+      if(data.pregao && data.pregao.leilao) {
+        _data = data.pregao
+      }
+      if (!_data || !_data.leilao || !_data.leilao.id) return false
       if (!this.leilao) return false
-      return data.leilao.id === this.leilao.id
+      return _data.leilao.id === this.leilao.id
     },
     /**
      * Verifica se a comunicação recebida do realtime é relacionada ao lote renderizado em tela
@@ -135,11 +148,13 @@ const Component = {
     },
     /**
      * Remove um lance
-     * @param id
+     * @param loteId
+     * @param lanceId
      * @private
      */
-    __removeLance (id) {
-      const lance = this.lote.lances.find(lance => lance.id === id)
+    __removeLance (loteId, lanceId) {
+      if (!this.isLoteComunication(loteId)) return
+      const lance = this.lote.lances.find(lance => lance.id === lanceId)
       this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
     },
     /**
@@ -167,6 +182,11 @@ const Component = {
     __abrirLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+      if (!data.leilao.pregaoAtivo || !data.leilao.pregaoAtivo.lote) {
+        console.error('Não é possível abrir o leilão sem um lote ativo')
+        return
+      }
+      this.lote = data.leilao.pregaoAtivo.lote
     },
     /**
      * Quando um leilão é fechado (auditório virtual)
@@ -176,7 +196,14 @@ const Component = {
     __encerrarLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
-    }
+    },
+
+    __mudaLote (data) {
+      console.log('Muda lote', data)
+      if (!this.isLeilaoComunication(data)) return
+      this.leilao.pregaoAtivo = data.pregao
+      this.lote = data.pregao.lote
+    },
   }
 }
 

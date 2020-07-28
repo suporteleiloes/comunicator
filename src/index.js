@@ -230,6 +230,46 @@ class Comunicator {
   }
 
   /**
+   * Altera incremento do lote
+   * @param loteId
+   * @param valor
+   * @returns {Promise<>}
+   */
+  alterarIncrementoLote (loteId, valor) {
+    return new Promise((resolve, reject) => {
+      this.http.patch(`/api/cmd/lotes/${loteId}/alterarIncremento`, {
+        valor: valor
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
+   * Altera valor inicial do lote
+   * @param loteId
+   * @param valor
+   * @returns {Promise<>}
+   */
+  alterarValorInicialLote (loteId, valor) {
+    return new Promise((resolve, reject) => {
+      this.http.patch(`/api/cmd/lotes/${loteId}/alterarValorInicial`, {
+        valor: valor
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
    * Envia uma mensagem para todos os arrematantes/comitentes/usuarios,
    * em uma sala de um leilão ou em todos os leilões. Para todos ou para somente um arrematante.
    * @param mensagem

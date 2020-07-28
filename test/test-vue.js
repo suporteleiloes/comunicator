@@ -1,5 +1,5 @@
 const Vue = require('vue')
-const LoteMixin = require('../src/integrations/vue/mixins/lote.mixin.js')
+const LoteMixin = require('../src/integrations/vue/mixins/leilao.mixin.js')
 
 Vue.runtimeCompiler = true
 console.log('Test vue...');

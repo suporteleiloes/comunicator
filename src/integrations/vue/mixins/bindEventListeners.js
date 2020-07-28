@@ -62,7 +62,7 @@ const Mixin = {
       this.__parseLance && this.__parseLance((data.lote ? data.lote.id : data.lote), data)
     },
     onLanceDeletado (data) {
-      this.__deleteLance && this.__deleteLance((data.lote ? data.lote.id : data.lote), data)
+      this.__removeLance && this.__removeLance(data.lote.id, data.lote.lance.id)
     },
     onLancesZerados (data) {
       this.__zeraLances && this.__zeraLances(data)

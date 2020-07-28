@@ -34,6 +34,11 @@ const Cronometro = {
     // this.unbindEvents()
   },
   methods: {
+    __alteracaoCronometroLeilao (data) {
+      console.log('CRONOMETRO UPDATE', data)
+      if (!this.isLeilaoComunication(data)) return
+      this.leilao = Object.assign({}, this.leilao, data.leilao)
+    },
     calcPercentTimer (percent) {
       let downTimer = this.timerPregao
       return (downTimer * (percent / 100))

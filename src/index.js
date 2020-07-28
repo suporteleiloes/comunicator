@@ -270,6 +270,26 @@ class Comunicator {
   }
 
   /**
+   * Altera o tempo dp cronômetro do leilão
+   * @param leilaoId
+   * @param valor
+   * @returns {Promise<>}
+   */
+  alterarCronometroLeilao (leilaoId, valor) {
+    return new Promise((resolve, reject) => {
+      this.http.patch(`/api/cmd/leiloes/${leilaoId}/alteraCronometro`, {
+        valor: valor
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
    * Envia uma mensagem para todos os arrematantes/comitentes/usuarios,
    * em uma sala de um leilão ou em todos os leilões. Para todos ou para somente um arrematante.
    * @param mensagem

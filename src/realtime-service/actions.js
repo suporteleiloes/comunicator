@@ -226,15 +226,17 @@ const Actions = {
   },
 
   /**
-   * Quando o incremento mínimo do lote é alterado.
+   * Quando o valor de incremento do lote é alterado.
    * @param data
    * @return {Object|null}
    * Sample:
    * {
-   *  leilao: {Integer}
    *  lote: {
    *    id: {Integer}
-   *    incremento: {Float}
+   *    valorIncremento: {Float},
+   *    leilao: {
+   *      id: {Integer}
+   *    }
    *  }
    * }
    */
@@ -243,15 +245,17 @@ const Actions = {
   },
 
   /**
-   * Quando o valor inicial do lance para o lote é alterado.
+   * Quando o valor inicial do lote é alterado.
    * @param data
    * @return {Object|null}
    * Sample:
    * {
-   *  leilao: {Integer}
    *  lote: {
    *    id: {Integer}
-   *    valorInicial: {Float}
+   *    valorInicial: {Float},
+   *    leilao: {
+   *      id: {Integer}
+   *    }
    *  }
    * }
    */

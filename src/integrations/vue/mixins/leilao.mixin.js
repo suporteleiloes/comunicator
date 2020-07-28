@@ -37,7 +37,7 @@ const Component = {
       return this.lote.lances[0]
     },
     lanceLocalidade () {
-      if (this.ultimoLance){
+      if (this.ultimoLance) {
         return `${this.ultimoLance.autor.cidade} - ${this.ultimoLance.autor.uf}`
       }
       return null
@@ -78,7 +78,7 @@ const Component = {
      */
     isLeilaoComunication (data) {
       let _data = data
-      if(data.pregao && data.pregao.leilao) {
+      if (data.pregao && data.pregao.leilao) {
         _data = data.pregao
       }
       if (!_data || !_data.leilao || !_data.leilao.id) return false
@@ -204,6 +204,26 @@ const Component = {
       this.leilao.pregaoAtivo = data.pregao
       this.lote = data.pregao.lote
     },
+
+    /**
+     * Altera o incremento do lote
+     * @param data
+     * @private
+     */
+    __alteracaoIncrementoLote (data) {
+      if (!this.isLoteComunication(data.lote.id)) return
+      this.lote = Object.assign({}, this.lote, data.lote)
+    },
+
+    /**
+     * Altera o valor inicial do lote
+     * @param data
+     * @private
+     */
+    __alteracaoValorInicialLote (data) {
+      if (!this.isLoteComunication(data.lote.id)) return
+      this.lote = Object.assign({}, this.lote, data.lote)
+    }
   }
 }
 

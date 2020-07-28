@@ -223,6 +223,15 @@ const Component = {
     __alteracaoValorInicialLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
+    },
+    /**
+     * Altera o status do lote
+     * @param data
+     * @private
+     */
+    __statusLote (data) {
+      if (!this.isLoteComunication(data.lote.id)) return
+      this.lote = Object.assign({}, this.lote, data.lote)
     }
   }
 }

@@ -232,6 +232,13 @@ const Component = {
     __statusLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
+      if (data.lote.status !== 2) {
+        this.desativaTimer()
+      } else {
+        this.$nextTick(() => {
+          this.ativaTimer()
+        })
+      }
     }
   }
 }

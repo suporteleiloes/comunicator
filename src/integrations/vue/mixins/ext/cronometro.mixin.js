@@ -1,45 +1,36 @@
 var differenceInSeconds = require('date-fns/differenceInSeconds')
 var isAfter = require('date-fns/isAfter')
 var add = require('date-fns/add')
-console.log(isAfter)
+var parseISO = require('date-fns/parseISO')
+if (differenceInSeconds.default) {
+  differenceInSeconds = differenceInSeconds.default
+  isAfter = isAfter.default
+  add = add.default
+  parseISO = parseISO.default
+}
 const Cronometro = {
   data () {
-    return {}
+    return {
+      counter: 0,
+      timeUltimaAtividade: null,
+      timeLimite: null
+    }
   },
   computed: {
     timerPregao () {
-      let timer
-      if (this.lote && this.lote.cronometro) {
-        timer = this.lote.cronometro
-      } else if (typeof this.leilao['timerPregao'] !== 'undefined' && !Number.isNaN(Number(this.leilao.timerPregao))) {
-        timer = this.leilao.timerPregao
-      } else {
-        timer = 10
-      }
-      timer = parseInt(+timer)
+      let timer = this.getTimer()
       if (Number(this.lote.status) === 2) {
         // Ativa cronômetro
         const pregao = this.lote.historicoPregao.find(h => !h.dataEncerramento)
-        if (!pregao) {
+        if (!pregao || !this.timeUltimaAtividade || !this.timeLimite) {
           return timer
         }
-        if (this.ultimoLance) {
-          // Existe lance. Verificar se o lance é ante sou depois do status pregao
-          if (isAfter(this.ultimoLance.data.date, pregao.dataAbertura.date)) {
-            // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
-            timer = differenceInSeconds(
-              this.ultimoLance.data.date,
-              add(this.ultimoLance.data.date, {seconds: timer})
-            )
-          } else {
-            // Calcula cronometro baseando-se na data de abertura do pregao
-            timer = differenceInSeconds(
-              pregao.dataAbertura.date,
-              add(pregao.dataAbertura.date, {seconds: timer})
-            )
-          }
-        }
+        return timer = differenceInSeconds(
+          this.timeLimite,
+          this.timeUltimaAtividade
+        )
       }
+      console.log(timer)
       return timer
     },
     timerPregaoFormatado () {
@@ -61,14 +52,62 @@ const Cronometro = {
     // this.unbindEvents()
   },
   methods: {
+    getTimer () {
+      let timer
+      if (this.lote && this.lote.cronometro) {
+        timer = this.lote.cronometro
+      } else if (typeof this.leilao['timerPregao'] !== 'undefined' && !Number.isNaN(Number(this.leilao.timerPregao))) {
+        timer = this.leilao.timerPregao
+      } else {
+        timer = 10
+      }
+      return timer = parseInt(+timer)
+    },
     __alteracaoCronometroLeilao (data) {
       console.log('CRONOMETRO UPDATE', data)
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
     },
     calcPercentTimer (percent) {
-      let downTimer = this.timerPregao
+      let downTimer = this.getTimer()
+      console.log('Downtimer', downTimer, (downTimer * (percent / 100)))
       return (downTimer * (percent / 100))
+    },
+    ativaTimer () {
+      this.counter = 0
+      this.timeUltimaAtividade = null
+      this.timeLimite = null
+      const pregao = this.lote.historicoPregao.find(h => !h.dataEncerramento)
+      if (!pregao) {
+        console.error('Não é possível ligar o cronômetro sem um pregão ativo para o lote')
+        return
+      }
+      let ultimaAtividade = parseISO(pregao.dataAbertura.date)
+      if (this.ultimoLance) {
+        // Existe lance. Verificar se o lance é ante sou depois do status pregao
+        let dataLance = parseISO(this.ultimoLance.data.date)
+        if (isAfter(dataLance, ultimaAtividade)) {
+          // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
+          // this.ativaTimer(dataLance)
+          ultimaAtividade = dataLance
+        } else {
+          // Calcula cronometro baseando-se na data de abertura do pregao
+          // this.ativaTimer(dataPregao)
+        }
+      }
+      this.timeUltimaAtividade = ultimaAtividade
+      this.timeLimite = add(ultimaAtividade, {seconds: this.getTimer()})
+      this.$intervalCronometro = setInterval(() => {
+        this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
+      }, 1000)
+    },
+    desativaTimer () {
+      this.counter = 0
+      this.timeUltimaAtividade = null
+      this.timeLimite = null
+      if (this.$intervalCronometro) {
+        clearInterval(this.$intervalCronometro)
+      }
     }
   }
 }

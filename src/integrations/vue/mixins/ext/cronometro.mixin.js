@@ -25,13 +25,12 @@ const Cronometro = {
         if (!pregao || !this.timeUltimaAtividade || !this.timeLimite) {
           return timer
         }
-        return timer = differenceInSeconds(
+        timer = differenceInSeconds(
           this.timeLimite,
           this.timeUltimaAtividade
         )
       }
-      console.log(timer)
-      return timer
+      return timer < 0 ? 0 : timer
     },
     timerPregaoFormatado () {
       const timer = Number(this.timerPregao)

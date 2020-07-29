@@ -10,6 +10,8 @@ const Component = {
     return {
       leilao: null,
       lote: null,
+      loteAnterior: null,
+      loteProximo: null,
       hasPregao: false,
       hasNovoLance: false,
       valorLance: 0.00,
@@ -202,6 +204,9 @@ const Component = {
       console.log('Muda lote', data)
       if (!this.isLeilaoComunication(data)) return
       this.leilao.pregaoAtivo = data.pregao
+      if (this.lote) {
+        this.loteAnterior = this.lote
+      }
       this.lote = data.pregao.lote
     },
 

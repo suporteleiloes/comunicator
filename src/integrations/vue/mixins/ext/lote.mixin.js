@@ -1,14 +1,13 @@
 const Status = require('../../../../helpers/LoteStatus')
 const Lote = {
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     loteNumero () {
       if (this.lote && this.lote.numero && this.lote.numero !== 'null' && !Number.isNaN(Number(this.lote.numero))) {
-        let str = String(this.lote.numero)
-        let pad = '000'
+        const str = String(this.lote.numero)
+        const pad = '000'
         return pad.substring(0, pad.length - str.length) + str
       }
       return 'S/N'
@@ -21,7 +20,7 @@ const Lote = {
         return Status.Status[this.lote.status].title
       }
       return 'Status inválido'
-    },
+    }
   },
   mounted () {
   },

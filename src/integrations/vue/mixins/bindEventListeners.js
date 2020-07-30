@@ -1,4 +1,4 @@
-let isBinded = false
+// let isBinded = false
 
 const events = [
   'lance',
@@ -39,18 +39,18 @@ const Mixin = {
      * Is necessary to exists comunicator and comunicatorClass in the context
      */
     bindEvents () {
-      if (!isBinded) {
+      if (!this.isBinded) {
         events.map(e => {
           this.comunicator && this.comunicator.on(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
         })
-        isBinded = true
+        this.sBinded = true
       }
     },
     unbindEvents () {
       events.map(e => {
         this.comunicator && this.comunicator.on(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
       })
-      isBinded = false
+      this.isBinded = false
     },
     onAberturaLeilao (data) {
       this.__abrirLeilao && this.__abrirLeilao(data)

@@ -197,13 +197,13 @@ const Component = {
      */
     __encerrarLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
-      this.leilao = Object.assign({}, this.leilao, data.leilao)
+      this.leilao = data.leilao
     },
 
     __mudaLote (data) {
       console.log('Muda lote', data)
       if (!this.isLeilaoComunication(data)) return
-      this.leilao.pregaoAtivo = data.pregao
+      this.leilao = Object.assign({}, this.leilao, {pregaoAtivo: data.pregao})
       if (this.lote) {
         this.loteAnterior = this.lote
       }

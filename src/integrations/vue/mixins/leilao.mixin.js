@@ -23,6 +23,9 @@ const Component = {
     isFechado () {
       return Number(this.lote.status) !== Status.STATUS_ABERTO_PARA_LANCES
     },
+    isPermitidoLance () {
+      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO
+    },
     lanceInicial () {
       return this.valorAtual
     },

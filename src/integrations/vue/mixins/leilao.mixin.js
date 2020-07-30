@@ -27,7 +27,7 @@ const Component = {
       return this.valorAtual
     },
     lanceIncremento () {
-      return this.lote.valorIncremento
+      return Number(this.lote.valorIncremento)
     },
     valorIncremento5x () {
       return Number(this.lote.valorIncremento) * 5
@@ -54,13 +54,16 @@ const Component = {
       return Number(this.ultimoLance.valor)
     },
     lanceMinimo () {
+      if (this.ultimoLance) {
+        return Number(this.ultimoLance.valor) + Number(this.lote.valorIncremento)
+      }
       if (!this.lote.valorInicial) {
         if (this.lote.valorIncremento) {
-          return this.lote.valorIncremento
+          return Number(this.lote.valorIncremento)
         }
         return 1 // TODO: Poder digitar
       }
-      return this.lote.valorInicial
+      return Number(this.lote.valorInicial)
     },
     lanceVencedor () {
       return this.ultimoLance

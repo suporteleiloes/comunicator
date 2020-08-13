@@ -163,7 +163,7 @@ const Component = {
     __removeLance (loteId, lanceId) {
       if (!this.isLoteComunication(loteId)) return
       const lance = this.lote.lances.find(lance => lance.id === lanceId)
-      this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
+      lance && this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
     },
     /**
      * Atualiza um lance modificado
@@ -250,6 +250,15 @@ const Component = {
           this.ativaTimer()
         })
       }
+    },
+    /**
+     * Altera o status do leilão
+     * @param data
+     * @private
+     */
+    __statusLeilao (data) {
+      if (!this.isLeilaoComunication(data)) return
+      this.leilao = Object.assign({}, this.leilao, data.leilao)
     }
   }
 }

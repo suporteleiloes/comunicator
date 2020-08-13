@@ -20,6 +20,20 @@ const Lote = {
         return Status.Status[this.lote.status].title
       }
       return 'Status inválido'
+    },
+    fotos () {
+      const fotos = []
+      if (this.lote.bem.image) {
+        fotos.push({id: 0, url: this.lote.bem.image.min.url, full: this.lote.bem.image.full.url})
+      }
+      const fotosSite = this.lote.bem.arquivos.slice().filter(ft => ft.site)
+      if (fotosSite && fotosSite.length) {
+        return [
+          ...fotos,
+          ...fotosSite
+        ]
+      }
+      return fotos
     }
   },
   mounted () {

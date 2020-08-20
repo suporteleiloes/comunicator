@@ -152,6 +152,7 @@ const Component = {
           this.audioNotification && this.comunicatorClass.audios.lance.play()
         }
         !testFind && this.lote.lances.unshift(lance)
+        this.ativaTimer() // TMP
       })
     },
     /**

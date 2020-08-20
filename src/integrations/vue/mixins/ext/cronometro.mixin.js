@@ -73,6 +73,7 @@ const Cronometro = {
       return (downTimer * (percent / 100))
     },
     ativaTimer () {
+      this.desativaTimer() // prevent
       this.counter = 0
       this.timeUltimaAtividade = null
       this.timeLimite = null

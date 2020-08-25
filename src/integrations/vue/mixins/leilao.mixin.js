@@ -100,6 +100,7 @@ const Component = {
      */
     isLoteComunication (loteId) {
       if (!loteId) return false
+      if (!this.lote) return false
       return loteId === this.lote.id
     },
     /**

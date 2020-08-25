@@ -75,7 +75,8 @@ const Component = {
       if (!this.lote.lances || !this.lote.lances.length) {
         return null
       }
-      return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
+      return this.lote.lances
+      // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
     }
   },
   methods: {
@@ -99,6 +100,7 @@ const Component = {
      * @returns {boolean}
      */
     isLoteComunication (loteId) {
+      console.log(this.lote, this)
       if (!loteId) return false
       if (!this.lote) return false
       return loteId === this.lote.id
@@ -216,6 +218,9 @@ const Component = {
         this.loteAnterior = this.lote
       }
       this.lote = data.pregao.lote
+      if (this.lote.status === 2) {
+        this.ativaTimer()
+      }
     },
 
     /**

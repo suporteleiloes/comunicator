@@ -44,8 +44,17 @@ const Cronometro = {
   },
   mounted () {
     this.$nextTick(() => {
-      // this.bindEvents()
+      if (this.lote && this.lote.status === 2) {
+        this.ativaTimer()
+      }
     })
+  },
+  watch: {
+    lote () {
+      if (this.lote && this.lote.status === 2) {
+        this.ativaTimer()
+      }
+    }
   },
   beforeDestroy () {
     // this.unbindEvents()
@@ -73,19 +82,22 @@ const Cronometro = {
       return (downTimer * (percent / 100))
     },
     ativaTimer () {
+      console.log('Ativando timer...')
       this.desativaTimer() // prevent
       this.counter = 0
       this.timeUltimaAtividade = null
       this.timeLimite = null
-      const pregao = this.lote.historicoPregao.find(h => !h.dataEncerramento)
+      const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
       if (!pregao) {
         console.error('Não é possível ligar o cronômetro sem um pregão ativo para o lote')
         return
       }
+      console.log('!!! TEM PREGÃO: ', pregao)
       let ultimaAtividade = parseISO(pregao.dataAbertura.date)
       if (this.ultimoLance) {
         // Existe lance. Verificar se o lance é ante sou depois do status pregao
         const dataLance = parseISO(this.ultimoLance.data.date)
+        console.log('!!! TEM LANCE: ', dataLance)
         if (isAfter(dataLance, ultimaAtividade)) {
           // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
           // this.ativaTimer(dataLance)

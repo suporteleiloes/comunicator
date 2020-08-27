@@ -1,5 +1,5 @@
 // Wrapper for test
-if (typeof Audio === 'undefined') {
+/*if (typeof Audio === 'undefined') {
   var Audio = function (url) {
     return {
       play () {
@@ -7,7 +7,7 @@ if (typeof Audio === 'undefined') {
       }
     }
   }
-}
+}*/
 
 const AudioNotification = {
   lance: new Audio('https://static.suporteleiloes.com/global/audios/lance.mp3'),

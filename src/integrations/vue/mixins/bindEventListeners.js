@@ -48,7 +48,7 @@ const Mixin = {
     },
     unbindEvents () {
       events.map(e => {
-        this.comunicator && this.comunicator.on(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
+        this.comunicator && this.comunicator.off(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
       })
       this.isBinded = false
     },

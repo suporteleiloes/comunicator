@@ -24,8 +24,8 @@ const Mixin = {
           }
           this.comunicator._interceptors.push(this.bindMessage)
           clearInterval(this.$interval)
+          isBinded = true
         }, 3000)
-        isBinded = true
       }
     },
     unbindEvents () {

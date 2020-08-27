@@ -1,5 +1,6 @@
 /* eslint-disable */
 const Status = require('../../../helpers/LoteStatus')
+const StatusLeilao = require('../../../helpers/LeilaoStatus')
 const Events = require('./bindEventListeners')
 const Cronometro = require('./ext/cronometro.mixin')
 const Lote = require('./ext/lote.mixin')
@@ -12,7 +13,6 @@ const Component = {
       lote: null,
       loteAnterior: null,
       loteProximo: null,
-      hasPregao: false,
       hasNovoLance: false,
       valorLance: 0.00,
       isLancando: false,
@@ -77,6 +77,9 @@ const Component = {
       }
       return this.lote.lances
       // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
+    },
+    hasPregao () {
+      return this.leilao.status === StatusLeilao.STATUS_EM_LEILAO
     }
   },
   methods: {

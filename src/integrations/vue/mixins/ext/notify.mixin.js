@@ -22,9 +22,9 @@ const Mixin = {
             console.log('Comunicator does not exists, try in 3 seconds to bind')
             return
           }
+          this.comunicator._interceptors.push(this.bindMessage)
+          clearInterval(this.$interval)
         }, 3000)
-        this.comunicator._interceptors.push(this.bindMessage)
-        clearInterval(this.$interval)
         isBinded = true
       }
     },

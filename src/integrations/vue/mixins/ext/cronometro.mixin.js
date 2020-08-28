@@ -21,7 +21,7 @@ const Cronometro = {
       let timer = this.getTimer()
       if (Number(this.lote.status) === 2) {
         // Ativa cronômetro
-        const pregao = this.lote.historicoPregao.find(h => !h.dataEncerramento)
+        const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
         if (!pregao || !this.timeUltimaAtividade || !this.timeLimite) {
           return timer
         }

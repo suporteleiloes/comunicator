@@ -216,6 +216,7 @@ const Component = {
     __mudaLote (data) {
       console.log('Muda lote', data)
       if (!this.isLeilaoComunication(data)) return
+      if (typeof this.seguirLeilao !== 'undefined' && this.seguirLeilao === false) return
       this.leilao = Object.assign({}, this.leilao, {pregaoAtivo: data.pregao})
       if (this.lote) {
         this.loteAnterior = this.lote

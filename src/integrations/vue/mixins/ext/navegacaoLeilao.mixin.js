@@ -17,12 +17,20 @@ const Mixin = {
     bindEvents () {
       if (!isBinded) {
         console.log(this.comunicator)
-        this.comunicator._interceptors.push(this.bindMessage)
-        isBinded = true
+        this.$interval = setInterval(() => {
+          if (!this.comunicator) {
+            console.log('Comunicator does not exists, try in 3 seconds to bind')
+            return
+          }
+          this.comunicator._interceptors.push(this.bindMessage)
+          clearInterval(this.$interval)
+          isBinded = true
+        }, 3000)
       }
     },
     unbindEvents () {
       // this.comunicator.off('lance', this.onLance)
+      this.$interval && clearInterval(this.$interval)
       isBinded = false
     },
     bindMessage (event) {

@@ -45,7 +45,7 @@ class Comunicator {
           }
           this.servertimeInterval = setInterval(() => {
             this.servertime = this.servertime + 1000
-            console.log('A hora atual do servidor é: ' + new Date(this.servertime))
+            // console.log('A hora atual do servidor é: ' + new Date(this.servertime))
           }, 1000)
           resolve(response)
         })

@@ -20,7 +20,11 @@ class Comunicator {
     let startTime = 0
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`)
+      this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
+        headers: {
+          'Authorization': null
+        }
+      })
         .then(response => {
           let responseServertime = response.data.time
           this.servertime = serverTime = Date.parse(responseServertime.toString())

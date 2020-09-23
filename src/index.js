@@ -35,7 +35,7 @@ class Comunicator {
           this.servertime = Date.parse(responseServertime.toString())
           let actualTime = new Date().getTime()
           diffTime = actualTime - startTime
-          this.servertime = this.servertime + diffTime
+          this.servertime = this.servertime + diffTime + 1000
           console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
           console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
           console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')

@@ -17,7 +17,7 @@ class Comunicator {
    */
   servertimeSync (leilaoId = null) {
     let serverTime = 0
-    let startTime = 0
+    let startTime = new Date().getTime()
     let diffTime = 0
     return new Promise((resolve, reject) => {
       setTimeout(() => {

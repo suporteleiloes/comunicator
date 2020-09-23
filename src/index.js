@@ -36,6 +36,13 @@ class Comunicator {
           console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
           console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
           console.log('A hora atual do servidor é: ' + new Date(this.servertime))
+          if (this.servertimeInterval) {
+            clearInterval(this.servertimeInterval)
+          }
+          this.servertimeInterval = setInterval(() => {
+            this.servertime = this.servertime + 1000
+            console.log('A hora atual do servidor é: ' + new Date(this.servertime))
+          }, 1000)
           resolve(response)
         })
         .catch(error => {

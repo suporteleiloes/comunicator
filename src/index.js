@@ -20,33 +20,35 @@ class Comunicator {
     let startTime = 0
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
-        transformRequest: [function (data, headers) {
-          delete headers.common.Authorization
-          return data;
-        }],
-      })
-        .then(response => {
-          let responseServertime = response.data.time
-          this.servertime = serverTime = Date.parse(responseServertime.toString())
-          startTime = new Date().getTime()
-          console.log(serverTime)
-          let actualTime = new Date().getTime()
-          diffTime = actualTime - startTime
-          // serverTime = serverTime + diffTime + 1000
-          // serverTime = serverTime + 1000
-          console.log('O sistema levou ' + diffTime / 1000 + ' segundos para carregar o timestamp do servidor')
-          console.log('A hora atual do servidor é: ' + new Date(serverTime))
-          resolve(response)
+      setTimeout(() => {
+        this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
+          transformRequest: [function (data, headers) {
+            delete headers.common.Authorization
+            return data;
+          }],
         })
-        .catch(error => {
-          serverTime = 0
-          if (typeof alert !== 'undefined') {
-            alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
-          }
-          console.error(error)
-          reject(error)
-        })
+          .then(response => {
+            let responseServertime = response.data.time
+            this.servertime = serverTime = Date.parse(responseServertime.toString())
+            startTime = new Date().getTime()
+            console.log(serverTime)
+            let actualTime = new Date().getTime()
+            diffTime = actualTime - startTime
+            // serverTime = serverTime + diffTime + 1000
+            // serverTime = serverTime + 1000
+            console.log('O sistema levou ' + diffTime / 1000 + ' segundos para carregar o timestamp do servidor')
+            console.log('A hora atual do servidor é: ' + new Date(serverTime))
+            resolve(response)
+          })
+          .catch(error => {
+            serverTime = 0
+            if (typeof alert !== 'undefined') {
+              alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
+            }
+            console.error(error)
+            reject(error)
+          })
+      }, 4000)
     });
   }
 

@@ -31,7 +31,6 @@ class Comunicator {
           .then(response => {
             let responseServertime = response.data.time
             this.servertime = serverTime = Date.parse(responseServertime.toString())
-            startTime = new Date().getTime()
             console.log(serverTime)
             let actualTime = new Date().getTime()
             diffTime = actualTime - startTime
@@ -51,7 +50,7 @@ class Comunicator {
             console.error(error)
             reject(error)
           })
-      }, 14000)
+      }, 4000)
     });
   }
 

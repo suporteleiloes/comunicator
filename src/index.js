@@ -22,8 +22,8 @@ class Comunicator {
     return new Promise((resolve, reject) => {
       this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`)
         .then(response => {
-          this.servertime = response.data.time
-          serverTime = Date.parse(data.toString())
+          let responseServertime = response.data.time
+          this.servertime = serverTime = Date.parse(responseServertime.toString())
           startTime = new Date().getTime()
           console.log(serverTime)
           let actualTime = new Date().getTime()

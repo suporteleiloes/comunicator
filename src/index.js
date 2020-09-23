@@ -36,7 +36,9 @@ class Comunicator {
             diffTime = actualTime - startTime
             // serverTime = serverTime + diffTime + 1000
             // serverTime = serverTime + 1000
-            console.log('O sistema levou ' + diffTime / 1000 + ' segundos para carregar o timestamp do servidor')
+            console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
+            console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
+            console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
             console.log('A hora atual do servidor é: ' + new Date(serverTime))
             resolve(response)
           })

@@ -115,8 +115,11 @@ const Cronometro = {
       this.timeLimite = add(ultimaAtividade, {seconds: this.getTimer()})
       console.log('!!! LIMITE: ', this.timeLimite)
       this.$intervalCronometro = setInterval(() => {
-        console.log(this.comunicator.servertime)
-        this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
+        if (this.comunicatorClass && this.comunicatorClass.servertime) {
+          this.timeUltimaAtividade = this.comunicatorClass.servertime
+        } else {
+          this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
+        }
       }, 1000)
     },
     desativaTimer () {

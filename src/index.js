@@ -20,7 +20,8 @@ class Comunicator {
     let startTime = new Date().getTime()
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
+      setTimeout(() =>
+        console.log('Timeout executado')
         this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
           transformRequest: [function (data, headers) {
             delete headers.common.Authorization

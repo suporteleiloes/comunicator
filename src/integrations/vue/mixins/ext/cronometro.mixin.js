@@ -13,7 +13,8 @@ const Cronometro = {
     return {
       counter: 0,
       timeUltimaAtividade: null,
-      timeLimite: null
+      timeLimite: null,
+      servertime: null
     }
   },
   computed: {
@@ -95,20 +96,24 @@ const Cronometro = {
       console.log('!!! TEM PREGÃO: ', pregao)
       let ultimaAtividade = parseISO(pregao.dataAbertura.date)
       if (this.ultimoLance) {
-        // Existe lance. Verificar se o lance é ante sou depois do status pregao
+        // Existe lance. Verificar se o lance é antes ou depois do status pregao
         const dataLance = parseISO(this.ultimoLance.data.date)
         console.log('!!! TEM LANCE: ', dataLance)
         if (isAfter(dataLance, ultimaAtividade)) {
           // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
           // this.ativaTimer(dataLance)
+          console.log('!!! LANCE DEPOIS DO PREGÃO')
           ultimaAtividade = dataLance
         } else {
+          console.log('!!! LANCE ANTES DO PREGÃO')
           // Calcula cronometro baseando-se na data de abertura do pregao
           // this.ativaTimer(dataPregao)
         }
       }
+      console.log('!!! ULTIMA ATIVIDADE', ultimaAtividade)
       this.timeUltimaAtividade = ultimaAtividade
       this.timeLimite = add(ultimaAtividade, {seconds: this.getTimer()})
+      console.log('!!! LIMITE: ', this.timeLimite)
       this.$intervalCronometro = setInterval(() => {
         this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
       }, 1000)

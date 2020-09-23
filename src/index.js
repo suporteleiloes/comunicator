@@ -6,6 +6,43 @@ class Comunicator {
     this.comunicator = comunicator;
     this.http = axiosInstance
     this.audios = audios
+    this.servertime = null
+    this.servertimeSync()
+  }
+
+  /**
+   * Sincroniza com o horário do servidor
+   * @param leilaoId
+   * @returns {Promise<>}
+   */
+  servertimeSync (leilaoId = null) {
+    let serverTime = 0
+    let startTime = 0
+    let diffTime = 0
+    return new Promise((resolve, reject) => {
+      this.http.post(`/api/public/servertime?leilao=${leilaoId || ''}`)
+        .then(response => {
+          this.servertime = response.data.time
+          serverTime = Date.parse(data.toString())
+          startTime = new Date().getTime()
+          console.log(serverTime)
+          let actualTime = new Date().getTime()
+          diffTime = actualTime - startTime
+          // serverTime = serverTime + diffTime + 1000
+          // serverTime = serverTime + 1000
+          console.log('O sistema levou ' + diffTime / 1000 + ' segundos para carregar o timestamp do servidor')
+          console.log('A hora atual do servidor é: ' + new Date(serverTime))
+          resolve(response)
+        })
+        .catch(error => {
+          serverTime = 0
+          if (typeof alert !== 'undefined') {
+            alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
+          }
+          console.error(error)
+          reject(error)
+        })
+    });
   }
 
   /**

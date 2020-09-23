@@ -21,9 +21,10 @@ class Comunicator {
     let diffTime = 0
     return new Promise((resolve, reject) => {
       this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
-        headers: {
-          'Authorization': null
-        }
+        transformRequest: [function (data, headers) {
+          delete headers.common.Authorization
+          return data;
+        }],
       })
         .then(response => {
           let responseServertime = response.data.time

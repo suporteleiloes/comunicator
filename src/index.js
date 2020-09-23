@@ -20,7 +20,7 @@ class Comunicator {
     let startTime = 0
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      this.http.post(`/api/public/servertime?leilao=${leilaoId || ''}`)
+      this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`)
         .then(response => {
           this.servertime = response.data.time
           serverTime = Date.parse(data.toString())

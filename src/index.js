@@ -51,7 +51,7 @@ class Comunicator {
             console.error(error)
             reject(error)
           })
-      }, 4000)
+      }, 14000)
     });
   }
 

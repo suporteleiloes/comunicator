@@ -8,6 +8,10 @@ class Comunicator {
     this.audios = audios
     this.servertime = null
     this.servertimeSync()
+    this.servertimeSyncInterval = setInterval(() => {
+      console.log('Sincronizando hora com o servidor')
+      this.servertimeSync()
+    }, 60000)
   }
 
   /**

@@ -79,8 +79,11 @@ const Cronometro = {
     },
     __alteracaoCronometroLote (data) {
       console.log('CRONOMETRO LOTE UPDATE', data)
-      if (!this.isLeilaoComunication(data)) return
-      this.leilao = Object.assign({}, this.lote, data.lote)
+      if (!data.lote || !data.lote.id) {
+        return
+      }
+      if (!this.isLoteComunication(data.lote.id)) return
+      this.lote = Object.assign({}, this.lote, data.lote)
     },
     calcPercentTimer (percent) {
       const downTimer = this.getTimer()

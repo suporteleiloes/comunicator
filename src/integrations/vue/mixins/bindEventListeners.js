@@ -17,6 +17,7 @@ const events = [
   'avisoAuditorioVirtual',
   'alteracaoIncrementoLote',
   'alteracaoValorInicialLote',
+  'alteracaoValorMinimoLote',
   'alteracaoLote',
   'alteracaoLeilao',
   'alteracaoStatusUsuario',
@@ -99,6 +100,9 @@ const Mixin = {
     },
     onAlteracaoValorInicialLote (data) {
       this.__alteracaoValorInicialLote && this.__alteracaoValorInicialLote(data)
+    },
+    onAlteracaoValorMinimoLote (data) {
+      this.__alteracaoValorMinimoLote && this.__alteracaoValorMinimoLote(data)
     },
     onAlteracaoLote (data) {
       this.__alteracaoLote && this.__alteracaoLote(data)

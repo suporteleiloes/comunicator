@@ -246,6 +246,17 @@ const Component = {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
     },
+
+    /**
+     * Altera o valor mínimo do lote
+     * @param data
+     * @private
+     */
+    __alteracaoValorMinimoLote (data) {
+      if (!this.isLoteComunication(data.lote.id)) return
+      this.lote = Object.assign({}, this.lote, data.lote)
+    },
+
     /**
      * Altera o status do lote
      * @param data

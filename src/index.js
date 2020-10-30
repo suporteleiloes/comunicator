@@ -322,6 +322,26 @@ class Comunicator {
   }
 
   /**
+   * Altera valor mínimo do lote
+   * @param loteId
+   * @param valor
+   * @returns {Promise<>}
+   */
+  alterarValorMinimoLote (loteId, valor) {
+    return new Promise((resolve, reject) => {
+      this.http.patch(`/api/cmd/lotes/${loteId}/alterarValorMinimo`, {
+        valor: valor
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
    * Altera o tempo dp cronômetro do leilão
    * @param leilaoId
    * @param valor

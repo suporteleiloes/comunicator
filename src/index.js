@@ -214,7 +214,7 @@ class Comunicator {
    */
   alterarCronometroLote (loteId, novoTempo) {
     return new Promise((resolve, reject) => {
-      this.http.post(`/api/cmd/lotes/${loteId}/alterarCronometro`, {
+      this.http.patch(`/api/cmd/lotes/${loteId}/alterarCronometro`, {
         tempo: novoTempo
       })
         .then(response => {

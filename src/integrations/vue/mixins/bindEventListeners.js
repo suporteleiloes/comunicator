@@ -66,7 +66,7 @@ const Mixin = {
       this.__removeLance && this.__removeLance(data.lote.id, data.lote.lance.id)
     },
     onLancesZerados (data) {
-      this.__zeraLances && this.__zeraLances(data)
+      this.__zeraLances && this.__zeraLances(data.lote)
     },
     onRenovarCronometro (data) {
       this.__renovarCronometro && this.__renovarCronometro(data)

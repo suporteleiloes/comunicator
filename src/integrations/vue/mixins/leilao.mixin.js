@@ -173,6 +173,15 @@ const Component = {
       lance && this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
     },
     /**
+     * Remove todos os lances
+     * @param loteId
+     * @private
+     */
+    __zeraLances (loteId) {
+      if (!this.isLoteComunication(loteId)) return
+      this.lote.lances = []
+    },
+    /**
      * Atualiza um lance modificado
      * @param lance
      * @private

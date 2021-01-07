@@ -290,6 +290,15 @@ const Component = {
     __statusLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+    },
+    /**
+     * Altera o video da live do leilão
+     * @param data
+     * @private
+     */
+    __onVideo (data) {
+      if (!this.isLeilaoComunication(data)) return
+      this.leilao = Object.assign({}, this.leilao, data.leilao)
     }
   }
 }

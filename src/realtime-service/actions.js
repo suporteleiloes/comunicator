@@ -377,6 +377,22 @@ const Actions = {
    */
   comitenteDecisaoStatusLote: (data) => {
     return data;
+  },
+
+  /**
+   * Quando a url da live/video do leilão é atualizada
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  leilao: {
+   *    id: {Integer}
+   *    video: {String}
+   *  }
+   * }
+   */
+  onVideo: (data) => {
+    return data;
   }
 
 };

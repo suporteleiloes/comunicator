@@ -469,6 +469,24 @@ class Comunicator {
   }
 
   /**
+   * Atualiza o link da live/video
+   * @returns {Promise<>}
+   */
+  defineUrlLive (leilaoId, url) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`/api/cmd/leiloes/${leilaoId}/live`, {
+        video: url
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
    * Informa de um logout para evitar açõo do timeout e consistência na informação de conectados.
    * @returns {Promise<>}
    */

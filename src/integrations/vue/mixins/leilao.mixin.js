@@ -296,7 +296,7 @@ const Component = {
      * @param data
      * @private
      */
-    __onVideo (data) {
+    __onLiveLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
     }

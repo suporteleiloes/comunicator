@@ -25,7 +25,7 @@ const events = [
   'onLogin',
   'onLogout',
   'comitenteDecisaoStatusLote',
-  'onVideo'
+  'onLiveLeilao'
 ]
 
 const Mixin = {
@@ -126,8 +126,8 @@ const Mixin = {
     onComitenteDecisaoStatusLote (data) {
       this.__comitenteDecisaoStatusLote && this.__comitenteDecisaoStatusLote(data)
     },
-    onVideo (data) {
-      this.__onVideo && this.__onVideo(data)
+    onLiveLeilao (data) {
+      this.__onliveLeilao && this.__onliveLeilao(data)
     }
   }
 }

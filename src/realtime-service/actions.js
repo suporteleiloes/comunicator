@@ -391,7 +391,7 @@ const Actions = {
    *  }
    * }
    */
-  onVideo: (data) => {
+  onLiveLeilao: (data) => {
     return data;
   }
 

@@ -391,7 +391,7 @@ const Actions = {
    *  }
    * }
    */
-  onLiveLeilao: (data) => {
+  liveLeilao: (data) => {
     return data;
   }
 

@@ -296,7 +296,7 @@ const Component = {
      * @param data
      * @private
      */
-    __onLiveLeilao (data) {
+    __liveLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
     }

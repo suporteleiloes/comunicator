@@ -127,7 +127,7 @@ const Mixin = {
       this.__comitenteDecisaoStatusLote && this.__comitenteDecisaoStatusLote(data)
     },
     onLiveLeilao (data) {
-      this.__onliveLeilao && this.__onliveLeilao(data)
+      this.__liveLeilao && this.__liveLeilao(data)
     }
   }
 }

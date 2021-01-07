@@ -25,7 +25,7 @@ const events = [
   'onLogin',
   'onLogout',
   'comitenteDecisaoStatusLote',
-  'onLiveLeilao'
+  'liveLeilao'
 ]
 
 const Mixin = {

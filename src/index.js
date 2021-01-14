@@ -7,6 +7,7 @@ class Comunicator {
     this.http = axiosInstance
     this.audios = audios
     this.servertime = null
+    this.localtime = (new Date()).getTime()
     this.servertimeSync()
     this.servertimeSyncInterval = setInterval(() => {
       console.log('Sincronizando hora com o servidor')
@@ -32,21 +33,15 @@ class Comunicator {
       })
         .then(response => {
           let responseServertime = response.data.time
-          this.servertime = Date.parse(responseServertime.toString())
-          let actualTime = new Date().getTime()
+          this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
+          let actualTime = this.localtime = new Date().getTime()
           diffTime = actualTime - startTime
-          this.servertime = this.servertime + diffTime + 1000
+          this.servertime = this.servertime + diffTime
           console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
           console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
           console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
           console.log('A hora atual do servidor é: ' + new Date(this.servertime))
-          if (this.servertimeInterval) {
-            clearInterval(this.servertimeInterval)
-          }
-          this.servertimeInterval = setInterval(() => {
-            this.servertime = this.servertime + 1000
-            // console.log('A hora atual do servidor é: ' + new Date(this.servertime))
-          }, 1000)
+          console.log('OPA!!!! ')
           resolve(response)
         })
         .catch(error => {
@@ -58,6 +53,15 @@ class Comunicator {
           reject(error)
         })
     });
+  }
+
+  /**
+   * Devolve a hora do servidor baseado na requisição inicial
+   */
+  getServertime () {
+    let now = new Date().getTime()
+    let tempoPercorrido = now - this.localtime
+    return this.servertime + tempoPercorrido
   }
 
   /**

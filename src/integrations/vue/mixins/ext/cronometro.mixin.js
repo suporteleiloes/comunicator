@@ -123,8 +123,8 @@ const Cronometro = {
       this.timeLimite = add(ultimaAtividade, {seconds: this.getTimer()})
       console.log('!!! LIMITE: ', this.timeLimite)
       this.$intervalCronometro = setInterval(() => {
-        if (this.comunicatorClass && this.comunicatorClass.servertime) {
-          this.timeUltimaAtividade = this.comunicatorClass.servertime
+        if (this.comunicatorClass && this.comunicatorClass.getServertime()) {
+          this.timeUltimaAtividade = this.comunicatorClass.getServertime()
         } else {
           this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
         }

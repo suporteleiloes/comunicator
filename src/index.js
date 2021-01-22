@@ -41,13 +41,12 @@ class Comunicator {
           console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
           console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
           console.log('A hora atual do servidor é: ' + new Date(this.servertime))
-          console.log('OPA!!!! ')
           resolve(response)
         })
         .catch(error => {
           serverTime = 0
           if (typeof alert !== 'undefined') {
-            alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
+            // alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
           }
           console.error(error)
           reject(error)

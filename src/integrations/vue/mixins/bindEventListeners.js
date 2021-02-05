@@ -25,7 +25,8 @@ const events = [
   'onLogin',
   'onLogout',
   'comitenteDecisaoStatusLote',
-  'liveLeilao'
+  'liveLeilao',
+  'comando'
 ]
 
 const Mixin = {
@@ -128,6 +129,9 @@ const Mixin = {
     },
     onLiveLeilao (data) {
       this.__liveLeilao && this.__liveLeilao(data)
+    },
+    onComando (data) {
+      this.__proccessCommand && this.__proccessCommand(data)
     }
   }
 }

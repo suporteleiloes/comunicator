@@ -393,6 +393,22 @@ const Actions = {
    */
   liveLeilao: (data) => {
     return data;
+  },
+
+  /**
+   * Quando um comando adicional é enviado para o usuário
+   * Exemplos: Ser redirecionado para uma página, abrir um vídeo, efetuar um lance (help) ou outros comandos que vão
+   * depender da aplicação e suas necessidades, então não teria como perver de forma fixa cada comando.
+   * @param data
+   * @return {Object|null}
+   * Sample:
+   * {
+   *  comando: {String}
+   *  parametros: {Object}
+   * }
+   */
+  comando: (data) => {
+    return data;
   }
 
 };

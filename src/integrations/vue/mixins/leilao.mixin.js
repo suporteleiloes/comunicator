@@ -15,6 +15,7 @@ const Component = {
       loteProximo: null,
       hasNovoLance: false,
       valorLance: 0.00,
+      parcelamento: null,
       isLancando: false,
       audioNotification: true
     }
@@ -118,7 +119,7 @@ const Component = {
     __efetuarLance (autoAdicionar = true) {
       return new Promise((resolve, reject) => {
         this.isLancando = true
-        this.comunicatorClass.lance(this.lote.id, this.valorLance)
+        this.comunicatorClass.lance(this.lote.id, this.valorLance, this.parcelamento)
           .then((response) => {
             this.audioNotification && this.comunicatorClass.audios.meuLance.play()
             this.__addLance(response.data.lance)

@@ -67,14 +67,16 @@ class Comunicator {
    * Efetua um novo lance
    * @param loteId
    * @param valor
-   * @param valor
+   * @param apelido
+   * @param parcelamento
    * @returns {Promise<>}
    */
-  lance (loteId, valor, apelido = null) {
+  lance (loteId, valor, apelido = null, parcelamento = null) {
     return new Promise((resolve, reject) => {
       this.http.post(`/api/lotes/${loteId}/lance`, {
         valor: valor,
-        apelido: apelido
+        apelido: apelido,
+        parcelamento: parcelamento
       })
         .then(response => {
           resolve(response)

@@ -398,7 +398,7 @@ const Actions = {
   /**
    * Quando um comando adicional é enviado para o usuário
    * Exemplos: Ser redirecionado para uma página, abrir um vídeo, efetuar um lance (help) ou outros comandos que vão
-   * depender da aplicação e suas necessidades, então não teria como perver de forma fixa cada comando.
+   * depender da aplicação e suas necessidades, então não teria como prever de forma fixa cada comando.
    * @param data
    * @return {Object|null}
    * Sample:

@@ -212,6 +212,26 @@ class Comunicator {
   }
 
   /**
+   * Infoma Doulhe
+   * @param loteId
+   * @param status integer (1, 2)
+   * @returns {Promise<>}
+   */
+  doulhe (loteId, status) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`/api/cmd/lotes/${loteId}/doulhe`, {
+        status: status
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
+
+  /**
    * Altera tempo do cronômetro do lote
    * @param loteId
    * @param novoTempo

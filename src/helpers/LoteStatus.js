@@ -43,5 +43,6 @@ module.exports = {
   STATUS_RETIRADO,
   STATUS_CANCELADO,
   STATUS_QUE_PRECISA_DE_LANCES,
-  Status
+  Status,
+  StatusFake
 }

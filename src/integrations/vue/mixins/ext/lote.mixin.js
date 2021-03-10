@@ -16,8 +16,8 @@ const Lote = {
       if (this.lote.status === null) {
         return '-'
       }
-      if (typeof Status.Status[this.lote.status] !== 'undefined') {
-        return Status.Status[this.lote.status].title
+      if (typeof Status.StatusFake[this.lote.status] !== 'undefined') {
+        return Status.StatusFake[this.lote.status].title
       }
       return 'Status inválido'
     },

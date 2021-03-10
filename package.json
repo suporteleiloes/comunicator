@@ -1,6 +1,6 @@
 {
   "name": "comunicator",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Realtime service for Suporte Leiloes",
   "main": "src/index.js",
   "scripts": {

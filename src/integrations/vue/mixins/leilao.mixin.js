@@ -25,7 +25,7 @@ const Component = {
       return Number(this.lote.status) !== Status.STATUS_ABERTO_PARA_LANCES
     },
     isPermitidoLance () {
-      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO
+      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
     },
     lanceInicial () {
       return this.valorAtual

@@ -22,7 +22,10 @@ const Status = {
   [STATUS_BAIXA_OFERTA]: {title: 'Baixa oferta', class: 'lote-status-' + STATUS_BAIXA_OFERTA},
   [STATUS_RETIRADO]: {title: 'Retirado', class: 'lote-status-' + STATUS_RETIRADO},
   [STATUS_CANCELADO]: {title: 'Cancelado', class: 'lote-status-' + STATUS_CANCELADO},
+}
 
+const StatusFake = {
+  ...Status,
   // Status fake, somente para mock data
   10001: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
   10002: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar

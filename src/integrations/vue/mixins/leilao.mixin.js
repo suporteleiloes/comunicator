@@ -275,7 +275,7 @@ const Component = {
     __statusLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
-      if (data.lote.status !== 2) {
+      if (data.lote.status !== 2 && data.lote.status < 10000) {
         this.desativaTimer()
       } else {
         this.$nextTick(() => {

@@ -300,6 +300,18 @@ const Component = {
     __liveLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+    },
+    /**
+     * Processa um comando adicional
+     * @TODO
+     * @param data
+     * @private
+     */
+    __proccessCommand (data) {
+      if (data.comando === 'doulhe') {
+        if (!this.isLoteComunication(data.parametros.id)) return
+        this.lote.status = (10000 + Number(data.parametros.doulhe))
+      }
     }
   }
 }

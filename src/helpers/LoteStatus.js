@@ -24,8 +24,8 @@ const Status = {
   [STATUS_CANCELADO]: {title: 'Cancelado', class: 'lote-status-' + STATUS_CANCELADO},
 
   // Status fake, somente para mock data
-  [10001]: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'},
-  [10002]: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'}
+  10001: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
+  10002: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar
 }
 
 module.exports = {

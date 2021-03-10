@@ -20,7 +20,7 @@ const Cronometro = {
   computed: {
     timerPregao () {
       let timer = this.getTimer()
-      if (Number(this.lote.status) === 2) {
+      if (Number(this.lote.status) === 2 || Number(this.lote.status) > 10000) {
         // Ativa cronômetro
         const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
         if (!pregao || !this.timeUltimaAtividade || !this.timeLimite) {

@@ -526,6 +526,26 @@ class Comunicator {
         })
     });
   }
+
+  /**
+   * Envia uma mensagem pública para o auditório
+   * @param leilaoId
+   * @param mensagem
+   * @returns {Promise<>}
+   */
+  mensagemAuditorio (leilaoId, mensagem) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`/api/cmd/leilao/${leilaoId}/auditorioMensagemPublica`, {
+        mensagem: mensagem
+      })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    });
+  }
 }
 
 if (typeof module !== 'undefined') {

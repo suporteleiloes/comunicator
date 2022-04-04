@@ -312,7 +312,6 @@ const Component = {
         if (!this.isLoteComunication(data.parametros.id)) return
         this.lote.status = (10000 + Number(data.parametros.doulhe))
       }
-      this.proccessCommand && this.proccessCommand(data)
     }
   }
 }

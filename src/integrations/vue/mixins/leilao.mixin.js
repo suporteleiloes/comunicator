@@ -155,7 +155,7 @@ const Component = {
           this.lote.lances = []
         }
         const testFind = this.lote.lances.find(l => l.id === lance.id)
-        if (this.$usuario && this.$usuario.id && this.$usuario.id !== lance.autor.id) {
+        if (this.$arrematante && this.$arrematante.id && this.$arrematante.id !== lance.autor.id) {
           this.audioNotification && this.comunicatorClass.audios.lance.play()
         }
         !testFind && this.lote.lances.unshift(lance)

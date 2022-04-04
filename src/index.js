@@ -387,8 +387,8 @@ class Comunicator {
   }
 
   /**
-   * Envia uma mensagem para todos os arrematantes/comitentes/usuarios,
-   * em uma sala de um leilão ou em todos os leilões. Para todos ou para somente um arrematante.
+   * Envia uma mensagem para todos os usuarios/comitentes/usuarios,
+   * em uma sala de um leilão ou em todos os leilões. Para todos ou para somente um usuario.
    * @param mensagem
    * @param leilaoId
    * @param usuarioId

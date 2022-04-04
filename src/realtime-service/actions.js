@@ -1,7 +1,7 @@
 const Actions = {
 
   /**
-   * Quando o sistema recebe um novo lance em um lote. Pode ser da plateia ou de um arrematante online.
+   * Quando o sistema recebe um novo lance em um lote. Pode ser da plateia ou de um usuario online.
    * @param data
    * @return {Object|null}
    * Sample:
@@ -13,7 +13,7 @@ const Actions = {
    *      id: {Integer}
    *      data: {Datetime}
    *      valor: {Decimal}
-   *      arrematante: {
+   *      usuario: {
    *        id: {Integer}
    *        apelido: {String} (e.g.: TIAGOFELIPE)
    *        pessoa: {

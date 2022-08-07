@@ -96,6 +96,9 @@ const Component = {
       }
       if (!_data || !_data.leilao || !_data.leilao.id) return false
       if (!this.leilao) return false
+      if (this.leilao && this.leilao.id === data.leilao.id && data.leilao.status && this.leilao.status !== data.leilao.status) {
+        this.leilao.status = data.leilao.status
+      }
       return _data.leilao.id === this.leilao.id
     },
     /**

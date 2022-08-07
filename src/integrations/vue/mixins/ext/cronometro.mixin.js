@@ -1,11 +1,14 @@
+/* eslint-disable */
 var differenceInSeconds = require('date-fns/differenceInSeconds')
 var isAfter = require('date-fns/isAfter')
 var add = require('date-fns/add')
+var sub = require('date-fns/sub')
 var parseISO = require('date-fns/parseISO')
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
   isAfter = isAfter.default
   add = add.default
+  sub = sub.default
   parseISO = parseISO.default
 }
 const Cronometro = {
@@ -14,38 +17,34 @@ const Cronometro = {
       counter: 0,
       timeUltimaAtividade: null,
       timeLimite: null,
-      servertime: null
+      servertime: null,
+      timerActive: false
     }
   },
   computed: {
     timerPregao () {
-      let timer = this.getTimer()
-      if (Number(this.lote.status) === 2 || Number(this.lote.status) > 10000) {
-        // Ativa cronômetro
-        const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
-        if (!pregao || !this.timeUltimaAtividade || !this.timeLimite) {
-          return timer
-        }
-        timer = differenceInSeconds(
-          this.timeLimite,
-          this.timeUltimaAtividade
-        )
+      const timeleft = this.timeUltimaAtividade
+
+      if (timeleft < 0) {
+        return `00:00:00`
       }
-      return timer < 0 ? 0 : timer
+
+      const days = Math.floor(timeleft / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((timeleft % (1000 * 60)) / 1000)
+      if (days > 0) {
+        return `${days}d ${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
+      }
+      return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
     },
     timerPregaoFormatado () {
-      const timer = Number(this.timerPregao)
-      if (timer < 60) {
-        return '00:' + ('0' + timer).slice(-2)
-      }
-      const hora = Math.floor(timer / 60)
-      const minutos = timer % 60
-      return ('0' + hora).slice(-2) + ':' + ('0' + minutos).slice(-2)
+      return this.timerPregao
     }
   },
   mounted () {
     this.$nextTick(() => {
-      if (this.lote && this.lote.status === 2) {
+      if (this.lote && this.lote.status < 5) {
         this.ativaTimer()
       }
     })
@@ -61,6 +60,9 @@ const Cronometro = {
     // this.unbindEvents()
   },
   methods: {
+    pad (n) {
+      return n < 10 ? '0' + n : n
+    },
     getTimer () {
       let timer
       if (this.lote && this.lote.cronometro) {
@@ -92,45 +94,34 @@ const Cronometro = {
     },
     ativaTimer () {
       console.log('Ativando timer...')
-      this.desativaTimer() // prevent
-      this.counter = 0
-      this.timeUltimaAtividade = null
-      this.timeLimite = null
-      const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
-      if (!pregao) {
-        console.error('Não é possível ligar o cronômetro sem um pregão ativo para o lote')
-        return
+      if (!this.lote.numero) {
+        console.log('Número do lote inválido, impossível ativar o cronometro')
       }
-      console.log('!!! TEM PREGÃO: ', pregao)
-      let ultimaAtividade = parseISO(pregao.dataAbertura.date)
-      if (this.ultimoLance) {
-        // Existe lance. Verificar se o lance é antes ou depois do status pregao
-        const dataLance = parseISO(this.ultimoLance.data.date)
-        console.log('!!! TEM LANCE: ', dataLance)
-        if (isAfter(dataLance, ultimaAtividade)) {
-          // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
-          // this.ativaTimer(dataLance)
-          console.log('!!! LANCE DEPOIS DO PREGÃO')
-          ultimaAtividade = dataLance
-        } else {
-          console.log('!!! LANCE ANTES DO PREGÃO')
-          // Calcula cronometro baseando-se na data de abertura do pregao
-          // this.ativaTimer(dataPregao)
-        }
-      }
-      console.log('!!! ULTIMA ATIVIDADE', ultimaAtividade)
-      this.timeUltimaAtividade = ultimaAtividade
-      this.timeLimite = add(ultimaAtividade, {seconds: this.getTimer()})
-      console.log('!!! LIMITE: ', this.timeLimite)
+      this.$intervalCronometro && clearInterval(this.$intervalCronometro)
       this.$intervalCronometro = setInterval(() => {
-        if (this.comunicatorClass && this.comunicatorClass.getServertime()) {
-          this.timeUltimaAtividade = this.comunicatorClass.getServertime()
-        } else {
-          this.timeUltimaAtividade = add(this.timeUltimaAtividade, {seconds: 1})
+        const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
+        let ultimaAtividade = parseISO(this.leilao.dataProximoLeilao.date)
+        ultimaAtividade = add(ultimaAtividade, {seconds: (this.leilao.timerIntervalo * this.lote.numero)})
+        if (this.ultimoLance) {
+          // Existe lance. Verificar se o lance é antes ou depois do status pregao
+          const dataLance = parseISO(this.ultimoLance.data.date)
+          //console.log('!!! TEM LANCE: ', dataLance)
+          if (isAfter(dataLance, sub(ultimaAtividade, {seconds: this.leilao.timerPregao}))) {
+            // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
+            // this.ativaTimer(dataLance)
+            console.log('!!! LANCE DEPOIS DO PREGÃO')
+            ultimaAtividade = add(dataLance, {seconds: this.leilao.timerPregao})
+          } else {
+            //console.log('!!! LANCE ANTES DO PREGÃO')
+            // Calcula cronometro baseando-se na data de abertura do pregao
+            // this.ativaTimer(dataPregao)
+          }
         }
-      }, 1000)
+        this.timeUltimaAtividade = ultimaAtividade - now
+      }, 500)
     },
     desativaTimer () {
+      if (this.leilao.controleSimultaneo || this.leilao.cronometroSempreAtivo) return
       this.counter = 0
       this.timeUltimaAtividade = null
       this.timeLimite = null

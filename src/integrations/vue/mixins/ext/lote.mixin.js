@@ -4,6 +4,9 @@ const Lote = {
     return {}
   },
   computed: {
+    permiteLancePeloCronometro () {
+      return this.timeUltimaAtividade > 1
+    },
     loteNumero () {
       if (this.lote && this.lote.numero && this.lote.numero !== 'null' && !Number.isNaN(Number(this.lote.numero))) {
         const str = String(this.lote.numero)

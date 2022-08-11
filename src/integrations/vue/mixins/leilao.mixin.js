@@ -315,6 +315,9 @@ const Component = {
         if (!this.isLoteComunication(data.parametros.id)) return
         this.lote.status = (10000 + Number(data.parametros.doulhe))
       }
+      if (data.comando === 'refresh') {
+        location.reload()
+      }
       this.proccessCommand && this.proccessCommand(data)
     }
   }

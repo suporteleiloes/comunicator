@@ -22,6 +22,9 @@ const Cronometro = {
     }
   },
   computed: {
+    timerIntervalo () {
+      return this.leilao && this.leilao.timerIntervalo ? this.leilao.timerIntervalo : this.lote.leilao.timerIntervalo
+    },
     timerPregao () {
       const timeleft = this.timeUltimaAtividade
 
@@ -51,12 +54,13 @@ const Cronometro = {
   },
   watch: {
     lote () {
-      if (this.lote && this.lote.status === 2) {
+      if (this.lote && this.lote.status < 5) {
         this.ativaTimer()
       }
     }
   },
   beforeDestroy () {
+    this.$intervalCronometro && clearInterval(this.$intervalCronometro)
     // this.unbindEvents()
   },
   methods: {
@@ -99,9 +103,17 @@ const Cronometro = {
       }
       this.$intervalCronometro && clearInterval(this.$intervalCronometro)
       this.$intervalCronometro = setInterval(() => {
+        console.log('TIMER LOTE ', this.lote.numero)
+        let loteNumero =  Number(this.lote.numero)
+        if (loteNumero > 150) {
+          loteNumero = loteNumero - 150
+        }
+        if (loteNumero > 300) {
+          loteNumero = loteNumero - 150
+        }
         const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
         let ultimaAtividade = parseISO(this.leilao.dataProximoLeilao.date)
-        ultimaAtividade = add(ultimaAtividade, {seconds: (this.leilao.timerIntervalo * this.lote.numero)})
+        ultimaAtividade = add(ultimaAtividade, {seconds: (this.timerIntervalo * loteNumero)})
         if (this.ultimoLance) {
           // Existe lance. Verificar se o lance é antes ou depois do status pregao
           const dataLance = parseISO(this.ultimoLance.data.date)
@@ -118,7 +130,7 @@ const Cronometro = {
           }
         }
         this.timeUltimaAtividade = ultimaAtividade - now
-      }, 500)
+      }, 1000)
     },
     desativaTimer () {
       if (this.leilao.controleSimultaneo || this.leilao.cronometroSempreAtivo) return

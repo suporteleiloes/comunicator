@@ -105,11 +105,11 @@ const Cronometro = {
       this.$intervalCronometro = setInterval(() => {
         console.log('TIMER LOTE ', this.lote.numero)
         let loteNumero =  Number(this.lote.numero)
-        if (loteNumero > 150) {
+        if (loteNumero > 150 && loteNumero < 300) {
           loteNumero = loteNumero - 150
         }
         if (loteNumero > 300) {
-          loteNumero = loteNumero - 150
+          loteNumero = loteNumero - 300
         }
         const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
         let ultimaAtividade = parseISO(this.leilao.dataProximoLeilao.date)

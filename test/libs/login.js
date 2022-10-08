@@ -2,6 +2,7 @@ import http from './http.js'
 
 async function login (user, pass) {
   try {
+    http.defaults.headers['uloc-mi'] = 'localhost'
     let session = await http.post(`/api/auth`,
       'user=' + user + '&pass=' + pass
     )
@@ -9,6 +10,7 @@ async function login (user, pass) {
     http.defaults.headers.common['Authorization'] = 'Bearer ' + userData.token
     console.log('Logado com sucesso.')
   } catch (e) {
+    //console.log(e)
     throw new Error(e.message)
   }
     /*.then(response => {

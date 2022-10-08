@@ -3,13 +3,16 @@ import Comunicator from '../src/index.js'
 import RealtimeInterface from '../src/realtime-service/interface.js'
 import http from './libs/http.js'
 import login from './libs/login.js'
+import testCredentials from "./testCredentials.js"
+import prompt from 'prompt'
+import colors from 'colors/safe.js'
 
 async function application () {
 
   try {
-    const session = await login('slroot', '161400') // TODO: Move to config
+    const session = await login(testCredentials.user, testCredentials.pass) // TODO: Move to config
   } catch (e) {
-    console.log('Falha ao tentar login na API', e.message)
+    console.log('Falha ao tentar login na API', e)
     return
   }
 
@@ -30,11 +33,7 @@ async function application () {
     }
   }
 
-  let ws = com.comunicator.connect('ws://localhost:8888/ws', {}, WSDriver)
-
-//
-  const prompt = require('prompt');
-  var colors = require('colors/safe');
+  let ws = com.comunicator.connect('wss://localhost:8443/ws', {}, WSDriver)
 
   function onErr (err) {
     // console.log(err);

@@ -1,3 +1,4 @@
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 import WebSocket from 'ws'
 import Comunicator from '../src/index.js'
 import RealtimeInterface from '../src/realtime-service/interface.js'

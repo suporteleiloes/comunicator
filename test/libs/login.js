@@ -1,4 +1,4 @@
-const http = require('./http')
+import http from './http.js'
 
 async function login (user, pass) {
   try {
@@ -21,6 +21,4 @@ async function login (user, pass) {
     })*/
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = login;
-}
+export default login

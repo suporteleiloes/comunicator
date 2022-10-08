@@ -1,8 +1,16 @@
-const audios = require('./libs/audioNotifications.js')
+import audios from './libs/audioNotifications.js'
 
 class Comunicator {
-  constructor (gateway, comunicator, axiosInstance) {
+  /**
+   *
+   * @param gateway - @TODO: Analisar
+   * @param comunicator - Instância do comunicator
+   * @param axiosInstance - Instância http
+   * @param backup - Endpoint de backup em caso de falha no comunicator
+   */
+  constructor (gateway, comunicator, axiosInstance, backup) {
     this.gatewayEnv = gateway;
+    this.backup = backup;
     this.comunicator = comunicator;
     this.http = axiosInstance
     this.audios = audios
@@ -548,6 +556,4 @@ class Comunicator {
   }
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = Comunicator;
-}
+export default Comunicator

@@ -3,6 +3,7 @@
   "version": "1.0.19",
   "description": "Realtime service for Suporte Leiloes",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "test": "node test/test.js",
     "test-vue": "node test/test-vue.js"
@@ -16,11 +17,11 @@
   "devDependencies": {
     "axios": "^0.19.2",
     "colors": "^1.4.0",
-    "prompt": "^1.0.0",
-    "vue": "^2.6.11",
-    "ws": "^7.3.0"
+    "prompt": "^1.3.0",
+    "vue": "^2.7.10",
+    "ws": "^7.5.9"
   },
   "dependencies": {
-    "date-fns": "^2.15.0"
+    "date-fns": "^2.29.3"
   }
 }

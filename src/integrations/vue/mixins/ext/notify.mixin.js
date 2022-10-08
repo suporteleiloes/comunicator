@@ -58,4 +58,4 @@ const Mixin = {
   }
 }
 
-module.exports = Mixin
+export default Mixin

@@ -1,12 +1,30 @@
 /* eslint-disable */
-const Status = require('../../../helpers/LoteStatus')
-const StatusLeilao = require('../../../helpers/LeilaoStatus')
-const Events = require('./bindEventListeners')
-const Cronometro = require('./ext/cronometro.mixin')
-const Lote = require('./ext/lote.mixin')
+// import Status from '../../../helpers/LoteStatus.js'
+import * as StatusLeilao from '../../../helpers/LeilaoStatus.js'
+import Events from './bindEventListeners.js'
+import Cronometro from './ext/cronometro.mixin.js'
+import Lote from './ext/lote.mixin.js'
+import UserActions from './ext/userActions.mixin.js'
+
+/**
+ * Leilão important props
+ * {
+ *         id: null,
+ *         controleAutomatico: false,
+ *         cronometro: false,
+ *         cronometroSempreAtivo: false,
+ *         permitirLanceAutomatico: false,
+ *         permitirLanceAntecipado: false,
+ *         controleSimultaneo: false,
+ *         timerPregao: 0,
+ *         timerIntervalo: 0,
+ *         controleTempoInicial: 0,
+ *       }
+ * @type {any}
+ */
 
 const Component = {
-  mixins: [Events, Cronometro, Lote],
+  mixins: [Events, Cronometro, Lote, UserActions],
   data () {
     return {
       leilao: null,
@@ -21,63 +39,17 @@ const Component = {
     }
   },
   computed: {
-    isFechado () {
-      return Number(this.lote.status) !== Status.STATUS_ABERTO_PARA_LANCES
+    hasCronometro () {
+      return this.leilao && this.leilao.cronometro
     },
-    isPermitidoLance () {
-      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
+    isRobo () {
+      return this.leilao && this.leilao.controleAutomatico
     },
-    lanceInicial () {
-      return this.valorAtual
+    isControleSimultaneo () {
+      return this.leilao && this.leilao.controleSimultaneo
     },
-    lanceIncremento () {
-      return Number(this.lote.valorIncremento)
-    },
-    valorIncremento5x () {
-      return Number(this.lote.valorIncremento) * 5
-    },
-    ultimoLance () {
-      if (!this.lote.lances || !this.lote.lances.length) {
-        return null
-      }
-      return this.lote.lances[0]
-    },
-    lanceLocalidade () {
-      if (this.ultimoLance) {
-        return `${this.ultimoLance.autor.cidade} - ${this.ultimoLance.autor.uf}`
-      }
-      return null
-    },
-    valorAtual () {
-      if (!this.ultimoLance) {
-        if (!this.lote.valorInicial) {
-          return 0
-        }
-        return Number(this.lote.valorInicial)
-      }
-      return Number(this.ultimoLance.valor)
-    },
-    lanceMinimo () {
-      if (this.ultimoLance) {
-        return Number(this.ultimoLance.valor) + Number(this.lote.valorIncremento)
-      }
-      if (!this.lote.valorInicial) {
-        if (this.lote.valorIncremento) {
-          return Number(this.lote.valorIncremento)
-        }
-        return 1 // TODO: Poder digitar
-      }
-      return Number(this.lote.valorInicial)
-    },
-    lanceVencedor () {
-      return this.ultimoLance
-    },
-    lances () {
-      if (!this.lote.lances || !this.lote.lances.length) {
-        return null
-      }
-      return this.lote.lances
-      // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
+    isCronometroSempreAtivo () {
+      return this.leilao && this.leilao.cronometroSempreAtivo
     },
     hasPregao () {
       return this.leilao.status === StatusLeilao.STATUS_EM_LEILAO
@@ -109,31 +81,7 @@ const Component = {
       if (!this.lote) return false
       return loteId === this.lote.id
     },
-    /**
-     * Efetua um lance
-     * Chama callbackLanceSucesso() em caso de sucesso e callbackLanceFalha() em caso de falha
-     * @param autoAdicionar - Adiciona automaticamente o lance na lista de lances e não espera pelo realtime
-     * @returns {Promise<object>}
-     * @private
-     */
-    __efetuarLance (autoAdicionar = true) {
-      return new Promise((resolve, reject) => {
-        this.isLancando = true
-        this.comunicatorClass.lance(this.lote.id, this.valorLance, null, this.parcelamento)
-          .then((response) => {
-            this.audioNotification && this.comunicatorClass.audios.meuLance.play()
-            this.__addLance(response.data.lance)
-            this.callbackLanceSucesso && this.callbackLanceSucesso(response.data)
-            resolve(response)
-          })
-          .catch(error => {
-            console.log(error)
-            this.audioNotification && this.comunicatorClass.audios.err.play()
-            this.callbackLanceFalha && this.callbackLanceFalha(error)
-            reject(error)
-          })
-      })
-    },
+
     /**
      * Verifica um lance para ser processado
      * @param loteId
@@ -237,6 +185,20 @@ const Component = {
       }
     },
 
+    __alteracaoLote (data) {
+      console.log('Altera dados do lote', data)
+      if (!this.isLeilaoComunication(data)) return
+      if (this.lote.id !== data.id) return
+      this.lote = Object.assign({}, this.lote, data.lote)
+    },
+
+    __alteracaoLeilao (data) {
+      console.log('Altera dados do leilão', data)
+      if (!this.isLeilaoComunication(data)) return
+      if (this.leilao.id !== data.id) return
+      this.leilao = Object.assign({}, this.leilao, data.leilao)
+    },
+
     /**
      * Altera o incremento do lote
      * @param data
@@ -317,4 +279,4 @@ const Component = {
   }
 }
 
-module.exports = Component
+export default Component

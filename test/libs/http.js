@@ -1,5 +1,5 @@
-const axios = require('axios')
-const https = require('https');
+import axios from 'axios'
+import https from 'https'
 
 const http = axios.create({
   // baseURL: 'https://127.0.0.1:8000/app_test.php',
@@ -11,6 +11,4 @@ const http = axios.create({
   })
 });
 
-if (typeof module !== 'undefined') {
-  module.exports = http;
-}
+export default http

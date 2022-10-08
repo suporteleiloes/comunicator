@@ -1,7 +1,4 @@
-var differenceInSeconds = require('date-fns/differenceInSeconds')
-var isAfter = require('date-fns/isAfter')
-var add = require('date-fns/add')
-var parseISO = require('date-fns/parseISO')
+import {differenceInSeconds, isAfter, add, parseISO} from 'date-fns'
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
   isAfter = isAfter.default
@@ -141,4 +138,4 @@ const Cronometro = {
   }
 }
 
-module.exports = Cronometro
+export default Cronometro

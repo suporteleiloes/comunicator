@@ -1,8 +1,8 @@
-const WebSocket = require('ws');
-const Comunicator = require('../src/index.js');
-const RealtimeInterface = require('../src/realtime-service/interface.js');
-const http = require('./libs/http')
-const login = require('./libs/login')
+import WebSocket from 'ws'
+import Comunicator from '../src/index.js'
+import RealtimeInterface from '../src/realtime-service/interface.js'
+import http from './libs/http.js'
+import login from './libs/login.js'
 
 async function application () {
 
@@ -429,4 +429,4 @@ async function application () {
 }
 
 application();
-const vue = require('./test-vue.js')
+const vue = import('./test-vue.js')

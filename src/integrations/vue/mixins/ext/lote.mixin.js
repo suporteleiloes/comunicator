@@ -1,4 +1,4 @@
-const Status = require('../../../../helpers/LoteStatus')
+import Status from '../../../../helpers/LoteStatus.js'
 const Lote = {
   data () {
     return {}
@@ -11,6 +11,12 @@ const Lote = {
         return pad.substring(0, pad.length - str.length) + str
       }
       return 'S/N'
+    },
+    isFechado () {
+      return Number(this.lote.status) !== Status.STATUS_ABERTO_PARA_LANCES
+    },
+    isPermitidoLance () {
+      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
     },
     loteStatusString () {
       if (this.lote.status === null) {
@@ -34,6 +40,58 @@ const Lote = {
         ]
       }
       return fotos
+    },
+    lanceInicial () {
+      return this.valorAtual
+    },
+    lanceIncremento () {
+      return Number(this.lote.valorIncremento)
+    },
+    valorIncremento5x () {
+      return Number(this.lote.valorIncremento) * 5
+    },
+    ultimoLance () {
+      if (!this.lote.lances || !this.lote.lances.length) {
+        return null
+      }
+      return this.lote.lances[0]
+    },
+    lanceLocalidade () {
+      if (this.ultimoLance) {
+        return `${this.ultimoLance.autor.cidade} - ${this.ultimoLance.autor.uf}`
+      }
+      return null
+    },
+    valorAtual () {
+      if (!this.ultimoLance) {
+        if (!this.lote.valorInicial) {
+          return 0
+        }
+        return Number(this.lote.valorInicial)
+      }
+      return Number(this.ultimoLance.valor)
+    },
+    lanceMinimo () {
+      if (this.ultimoLance) {
+        return Number(this.ultimoLance.valor) + Number(this.lote.valorIncremento)
+      }
+      if (!this.lote.valorInicial) {
+        if (this.lote.valorIncremento) {
+          return Number(this.lote.valorIncremento)
+        }
+        return 1 // TODO: Poder digitar
+      }
+      return Number(this.lote.valorInicial)
+    },
+    lanceVencedor () {
+      return this.ultimoLance
+    },
+    lances () {
+      if (!this.lote.lances || !this.lote.lances.length) {
+        return null
+      }
+      return this.lote.lances
+      // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
     }
   },
   mounted () {
@@ -43,4 +101,4 @@ const Lote = {
   methods: {}
 }
 
-module.exports = Lote
+export default Lote

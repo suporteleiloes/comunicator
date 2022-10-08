@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Actions = {
 
   /**
@@ -413,6 +414,4 @@ const Actions = {
 
 };
 
-if (typeof module !== 'undefined') {
-  module.exports = Actions;
-}
+export default Actions

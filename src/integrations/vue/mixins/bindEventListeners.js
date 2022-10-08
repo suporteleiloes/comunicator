@@ -1,33 +1,6 @@
 // let isBinded = false
-
-const events = [
-  'lance',
-  'lanceDeletado',
-  'lancesZerados',
-  'aberturaLeilao',
-  'encerramentoLeilao',
-  'renovarCronometro',
-  'mudaLote',
-  'statusLote',
-  'statusLeilao',
-  'alteracaoCronometroLote',
-  'alteracaoCronometroLeilao',
-  'pausaLeilao',
-  'retomarLeilao',
-  'avisoAuditorioVirtual',
-  'alteracaoIncrementoLote',
-  'alteracaoValorInicialLote',
-  'alteracaoValorMinimoLote',
-  'alteracaoLote',
-  'alteracaoLeilao',
-  'alteracaoStatusUsuario',
-  'onMessageReceive',
-  'onLogin',
-  'onLogout',
-  'comitenteDecisaoStatusLote',
-  'liveLeilao',
-  'comando'
-]
+import actions from '../../../realtime-service/actions.js'
+const events = Object.keys(actions)
 
 const Mixin = {
   created () {
@@ -44,7 +17,13 @@ const Mixin = {
     bindEvents () {
       if (!this.isBinded) {
         events.map(e => {
-          this.comunicator && this.comunicator.on(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
+          let callback
+          if (typeof this['on' + e.charAt(0).toUpperCase() + e.slice(1)] !== 'undefined'){
+            callback = this['on' + e.charAt(0).toUpperCase() + e.slice(1)]
+          } else {
+            callback = this.genericOn
+          }
+          this.comunicator && this.comunicator.on(e, callback)
         })
         this.sBinded = true
       }
@@ -54,6 +33,13 @@ const Mixin = {
         this.comunicator && this.comunicator.off(e, this['on' + e.charAt(0).toUpperCase() + e.slice(1)])
       })
       this.isBinded = false
+    },
+    genericOn (data, event) {
+      if (typeof this['__on' . e.charAt(0).toUpperCase() + e.slice(1)] !== 'undefined') {
+        this['__on' . e.charAt(0).toUpperCase() + e.slice(1)](data, event)
+      } else {
+        this.__genericOn && this.__genericOn(data, event)
+      }
     },
     onAberturaLeilao (data) {
       this.__abrirLeilao && this.__abrirLeilao(data)
@@ -136,4 +122,4 @@ const Mixin = {
   }
 }
 
-module.exports = Mixin
+export default Mixin

@@ -13,6 +13,4 @@ class WebsocketInterface {
   }
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = WebsocketInterface;
-}
+export default WebsocketInterface

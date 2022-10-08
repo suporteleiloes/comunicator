@@ -18,4 +18,4 @@ const log = (env) => {
   }
 }
 
-module.exports = log
+export default log

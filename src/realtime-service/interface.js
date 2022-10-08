@@ -1,13 +1,13 @@
-const WebsocketInterface = require('./websocket.js')
-const actions = require('./actions.js')
+import WebsocketInterface from './websocket.js'
+import actions from './actions.js'
+import devLog from '../helpers/log.js'
 let _log = () => void (0)
 if (process) {
-  _log = require('../helpers/log.js')
-  _log = _log('dev')
+  _log = devLog('dev')
 }
 
 /**
- * Comunicador v2.0.0
+ * Comunicador v2.1.0
  * Responsável pela comunicação realtime entre os sistemas de leilão
  * Esta biblioteca deve prover uma transparência entre a aplicação e o tipo de serviço para comunicação,
  * seja ele websocket ou outro.
@@ -211,7 +211,7 @@ const Comunicator = (function () {
     if (this._listeners[event.type] instanceof Array) {
       let listeners = this._listeners[event.type];
       for (let i = 0, len = listeners.length; i < len; i++) {
-        listeners[i].call(this, event.data);
+        listeners[i].call(this, event.data, event.type);
       }
     }
   };
@@ -303,6 +303,4 @@ const Comunicator = (function () {
 
 })();
 
-if (typeof module !== 'undefined') {
-  module.exports = Comunicator;
-}
+export default Comunicator

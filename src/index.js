@@ -10,7 +10,7 @@ class Comunicator {
    */
   constructor (gateway, comunicator, axiosInstance, backup) {
     this.gatewayEnv = gateway;
-    this.backup = backup;
+    this.backup = backup; // @TODO: Implementar mecanismo auxiliar em caso de falha no websocket
     this.comunicator = comunicator;
     this.http = axiosInstance
     this.audios = audios

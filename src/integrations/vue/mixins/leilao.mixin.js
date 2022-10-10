@@ -28,7 +28,6 @@ const Component = {
   data () {
     return {
       leilao: null,
-      lote: null,
       loteAnterior: null,
       loteProximo: null,
       hasNovoLance: false,
@@ -53,6 +52,15 @@ const Component = {
     },
     hasPregao () {
       return this.leilao.status === StatusLeilao.STATUS_EM_LEILAO
+    },
+    tempoCronometro () {
+      return this.leilao.timerPregao || 0
+    },
+    tempoIntervaloPrimeiroLote () {
+      return this.leilao.controleTempoInicial || 0
+    },
+    tempoIntervaloEntreLotes () {
+      return this.leilao.timerIntervalo || 0
     }
   },
   methods: {
@@ -69,83 +77,6 @@ const Component = {
       if (!_data || !_data.leilao || !_data.leilao.id) return false
       if (!this.leilao) return false
       return _data.leilao.id === this.leilao.id
-    },
-    /**
-     * Verifica se a comunicação recebida do realtime é relacionada ao lote renderizado em tela
-     * @param loteId
-     * @returns {boolean}
-     */
-    isLoteComunication (loteId) {
-      console.log(this.lote, this)
-      if (!loteId) return false
-      if (!this.lote) return false
-      return loteId === this.lote.id
-    },
-
-    /**
-     * Verifica um lance para ser processado
-     * @param loteId
-     * @param lance
-     * @private
-     */
-    __parseLance (loteId, lance) {
-      if (!this.isLoteComunication(loteId)) return
-      this.__addLance(lance)
-    },
-    /**
-     * Adiciona um lance na lista de lances
-     * @param lance
-     * @private
-     */
-    __addLance (lance) {
-      this.$nextTick(() => {
-        if (!Array.isArray(this.lote.lances)) {
-          this.lote.lances = []
-        }
-        const testFind = this.lote.lances.find(l => l.id === lance.id)
-        if (this.$arrematante && this.$arrematante.id && this.$arrematante.id !== lance.autor.id) {
-          this.audioNotification && this.comunicatorClass.audios.lance.play()
-        }
-        !testFind && this.lote.lances.unshift(lance)
-        this.ativaTimer() // TMP
-      })
-    },
-    /**
-     * Remove um lance
-     * @param loteId
-     * @param lanceId
-     * @private
-     */
-    __removeLance (loteId, lanceId) {
-      if (!this.isLoteComunication(loteId)) return
-      const lance = this.lote.lances.find(lance => lance.id === lanceId)
-      lance && this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
-    },
-    /**
-     * Remove todos os lances
-     * @param loteId
-     * @private
-     */
-    __zeraLances (loteId) {
-      if (!this.isLoteComunication(loteId)) return
-      this.lote.lances = []
-    },
-    /**
-     * Atualiza um lance modificado
-     * @param lance
-     * @private
-     */
-    __updateLance (lance) {
-      const _lance = this.lote.lances.find(_lance => _lance.id === lance.id)
-      this.lote.lances[this.lote.lances.indexOf(_lance)] = lance
-    },
-    /**
-     * Prepara e retorna o valor do incremento com um multiplicador
-     * @param n
-     * @returns {*}
-     */
-    lanceIncrementoMultiplo (n) {
-      return this.valorAtual + (this.valorIncremento5x * Number(n))
     },
     /**
      * Quando um leilão é aberto (auditório virtual)
@@ -184,66 +115,11 @@ const Component = {
         this.ativaTimer()
       }
     },
-
-    __alteracaoLote (data) {
-      console.log('Altera dados do lote', data)
-      if (!this.isLeilaoComunication(data)) return
-      if (this.lote.id !== data.id) return
-      this.lote = Object.assign({}, this.lote, data.lote)
-    },
-
     __alteracaoLeilao (data) {
       console.log('Altera dados do leilão', data)
       if (!this.isLeilaoComunication(data)) return
       if (this.leilao.id !== data.id) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
-    },
-
-    /**
-     * Altera o incremento do lote
-     * @param data
-     * @private
-     */
-    __alteracaoIncrementoLote (data) {
-      if (!this.isLoteComunication(data.lote.id)) return
-      this.lote = Object.assign({}, this.lote, data.lote)
-    },
-
-    /**
-     * Altera o valor inicial do lote
-     * @param data
-     * @private
-     */
-    __alteracaoValorInicialLote (data) {
-      if (!this.isLoteComunication(data.lote.id)) return
-      this.lote = Object.assign({}, this.lote, data.lote)
-    },
-
-    /**
-     * Altera o valor mínimo do lote
-     * @param data
-     * @private
-     */
-    __alteracaoValorMinimoLote (data) {
-      if (!this.isLoteComunication(data.lote.id)) return
-      this.lote = Object.assign({}, this.lote, data.lote)
-    },
-
-    /**
-     * Altera o status do lote
-     * @param data
-     * @private
-     */
-    __statusLote (data) {
-      if (!this.isLoteComunication(data.lote.id)) return
-      this.lote = Object.assign({}, this.lote, data.lote)
-      if (data.lote.status !== 2) {
-        this.desativaTimer()
-      } else {
-        this.$nextTick(() => {
-          this.ativaTimer()
-        })
-      }
     },
     /**
      * Altera o status do leilão

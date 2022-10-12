@@ -232,7 +232,7 @@ const Lote = {
     },
     verificarAcoesRobo () {
       if (this.isRobo) {
-        const timeleft = this.timeUltimaAtividade / 1000
+        const timeleft = Math.round(this.timeUltimaAtividade / 1000)
         if (timeleft > 0) {
           if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
             this.lote.status = LoteStatus.STATUS_EM_PREGAO
@@ -241,9 +241,9 @@ const Lote = {
           }
         }
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
-          if (timeleft < -1 && timeleft > -8) {
+          if (timeleft < -1 && timeleft > -6) {
             this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
-          } else if (timeleft < -8) {
+          } else if (timeleft < -6) {
             if (this.ultimoLance) {
               this.lote.status = LoteStatus.STATUS_VENDIDO
             } else {

@@ -49,7 +49,7 @@ const Cronometro = {
       }
 
       if (timeleft < 0) {
-        return !this.isRobo && !this.isCronometroSempreAtivo ? '00:00' : `00:00:00`
+        return !this.isRobo || !this.isCronometroSempreAtivo ? '00:00' : `00:00:00`
       }
 
       const days = Math.floor(timeleft / (1000 * 60 * 60 * 24))
@@ -65,7 +65,7 @@ const Cronometro = {
         if (this.lote.status !== StatusLote.STATUS_EM_PREGAO) {
           let tempo
           if (Number(this.lote.numero) === 1) {
-            tempo = this.tempoIntervaloPrimeiroLote || this.tempoCronometro
+            tempo = Math.abs(this.tempoIntervaloPrimeiroLote) || this.tempoCronometro
           } else {
             tempo = this.tempoCronometro
           }
@@ -77,7 +77,7 @@ const Cronometro = {
       if (days > 0) {
         return `${days}d ${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
       }
-      return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
+      return !this.isCronometroSempreAtivo ? `${this.pad(minutes)}:${this.pad(seconds)}` : `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
     },
     /**
      * @deprecated
@@ -217,6 +217,7 @@ const Cronometro = {
             const pregao = this.lote.historicoPregao ? this.lote.historicoPregao.find(h => !h.dataEncerramento) : null
             if (!pregao) {
               console.error('Não é possível ligar o cronômetro sem um pregão ativo para o lote')
+              this.desativaTimer(true)
               return
             }
             console.log('!!! TEM PREGÃO: ', pregao)
@@ -241,6 +242,7 @@ const Cronometro = {
         }
         this.timeUltimaAtividade = ultimaAtividade - now
         this.verificarAcoesRobo()
+        this.verificarAcoesLeilaoRobo()
       }
       cb()
       this.$intervalCronometro = setInterval(cb, 1000)

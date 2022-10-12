@@ -5,6 +5,7 @@ import Events from './bindEventListeners.js'
 import Cronometro from './ext/cronometro.mixin.js'
 import Lote from './ext/lote.mixin.js'
 import UserActions from './ext/userActions.mixin.js'
+import {sub, parseISO} from 'date-fns'
 
 /**
  * Leilão important props
@@ -63,7 +64,20 @@ const Component = {
       return this.leilao.timerIntervalo || 0
     }
   },
+  mounted() {
+    this.verificarAcoesLeilaoRobo()
+  },
   methods: {
+    verificarAcoesLeilaoRobo () {
+      let dataLeilao = parseISO(this.leilao.dataProximoLeilao.date)
+      let dataLeilaoParaIniciar = sub(dataLeilao, {seconds: (60 * 5)})
+      const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
+      const tempoParaLeilao = dataLeilaoParaIniciar - now
+      if (tempoParaLeilao < 0) {
+        this.leilao.status = StatusLeilao.STATUS_EM_LEILAO
+        this.leilao.statusMessage = StatusLeilao.Status[StatusLeilao.STATUS_EM_LEILAO].title
+      }
+    },
     /**
      * Verifica se a comunicação recebida do realtime é relacionada ao leilão renderizado em tela
      * @param data

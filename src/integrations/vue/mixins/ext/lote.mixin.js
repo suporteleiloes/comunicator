@@ -1,4 +1,5 @@
 import Status from '../../../../helpers/LoteStatus.js'
+import LoteStatus from "../../../../helpers/LoteStatus.js";
 const Lote = {
   data () {
     return {
@@ -179,9 +180,9 @@ const Lote = {
     },
     __alteracaoLote (data) {
       console.log('Altera dados do lote', data)
-      if (!this.isLeilaoComunication(data)) return
-      if (this.lote.id !== data.id) return
+      if (this.lote.id !== data.lote.id) return
       this.lote = Object.assign({}, this.lote, data.lote)
+      this.ativaTimer()
     },
     /**
      * Altera o incremento do lote
@@ -227,6 +228,29 @@ const Lote = {
         this.$nextTick(() => {
           this.ativaTimer()
         })
+      }
+    },
+    verificarAcoesRobo () {
+      if (this.isRobo) {
+        const timeleft = this.timeUltimaAtividade / 1000
+        if (timeleft > 0) {
+          if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
+            this.lote.status = LoteStatus.STATUS_EM_PREGAO
+          } else {
+            this.lote.status = LoteStatus.STATUS_ABERTO_PARA_LANCES
+          }
+        }
+        if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
+          if (timeleft < -1 && timeleft > -8) {
+            this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
+          } else if (timeleft < -8) {
+            if (this.ultimoLance) {
+              this.lote.status = LoteStatus.STATUS_VENDIDO
+            } else {
+              this.lote.status = LoteStatus.STATUS_SEM_LICITANTES
+            }
+          }
+        }
       }
     }
   }

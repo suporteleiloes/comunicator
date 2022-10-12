@@ -118,8 +118,9 @@ const Component = {
     __alteracaoLeilao (data) {
       console.log('Altera dados do leilão', data)
       if (!this.isLeilaoComunication(data)) return
-      if (this.leilao.id !== data.id) return
+      if (this.leilao.id !== data.leilao.id) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+      this.ativaTimer()
     },
     /**
      * Altera o status do leilão

@@ -39,9 +39,6 @@ const Cronometro = {
     timerPregao () {
       const timeleft = this.timeUltimaAtividade
 
-
-      console.log('TIMMMMMMMMMMMERRR', timeleft)
-
       /**
        * Passa se robô for não estiver ativo, se cronômetro sempre ativo estiver desabilitado e o lote não esteja em pregão
        */
@@ -52,7 +49,6 @@ const Cronometro = {
       }
 
       if (timeleft < 0) {
-        console.log('AQUIIIIIIIII')
         return !this.isRobo && !this.isCronometroSempreAtivo ? '00:00' : `00:00:00`
       }
 
@@ -62,6 +58,21 @@ const Cronometro = {
       const seconds = Math.floor((timeleft % (1000 * 60)) / 1000)
       if (!this.isRobo && !this.isCronometroSempreAtivo) {
         return `${this.pad(minutes)}:${this.pad(seconds)}`
+      }
+      // isRobo
+      if (!this.isCronometroSempreAtivo) {
+        // Cronômetro deve ativar somente no momento do encerramento
+        if (this.lote.status !== StatusLote.STATUS_EM_PREGAO) {
+          let tempo
+          if (Number(this.lote.numero) === 1) {
+            tempo = this.tempoIntervaloPrimeiroLote || this.tempoCronometro
+          } else {
+            tempo = this.tempoCronometro
+          }
+          const minutes = Math.floor(tempo / 60)
+          const seconds = Math.floor(tempo% 60)
+          return `${this.pad(minutes)}:${this.pad(seconds)}`
+        }
       }
       if (days > 0) {
         return `${days}d ${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`
@@ -124,7 +135,7 @@ const Cronometro = {
     },
     calcPercentTimer (percent) {
       const timeleft = this.timeUltimaAtividade
-      console.log('Downtimer', timeleft, (timeleft * (percent / 100)))
+      // console.log('Downtimer', timeleft, (timeleft * (percent / 100)))
       return (timeleft * (percent / 100))
     },
     /*ativaTimer () {
@@ -193,7 +204,9 @@ const Cronometro = {
           let loteNumero = Number(this.lote.numero)
           ultimaAtividade = parseISO(this.leilao.dataProximoLeilao.date)
           if (loteNumero === 1) {
-            ultimaAtividade = add(ultimaAtividade, {seconds: (this.tempoIntervaloPrimeiroLote)})
+            if (this.tempoIntervaloPrimeiroLote > 0) {
+              ultimaAtividade = add(ultimaAtividade, {seconds: (this.tempoIntervaloPrimeiroLote)})
+            }
           } else {
             ultimaAtividade = add(ultimaAtividade, {seconds: (this.tempoIntervaloEntreLotes * loteNumero)})
           }
@@ -227,6 +240,7 @@ const Cronometro = {
           }
         }
         this.timeUltimaAtividade = ultimaAtividade - now
+        this.verificarAcoesRobo()
       }
       cb()
       this.$intervalCronometro = setInterval(cb, 1000)

@@ -69,13 +69,15 @@ const Component = {
   },
   methods: {
     verificarAcoesLeilaoRobo () {
-      let dataLeilao = parseISO(this.leilao.dataProximoLeilao.date)
-      let dataLeilaoParaIniciar = sub(dataLeilao, {seconds: (60 * 5)})
-      const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
-      const tempoParaLeilao = dataLeilaoParaIniciar - now
-      if (tempoParaLeilao < 0) {
-        this.leilao.status = StatusLeilao.STATUS_EM_LEILAO
-        this.leilao.statusMessage = StatusLeilao.Status[StatusLeilao.STATUS_EM_LEILAO].title
+      if (this.isRobo) {
+        let dataLeilao = parseISO(this.leilao.dataProximoLeilao.date)
+        let dataLeilaoParaIniciar = sub(dataLeilao, {seconds: (60 * 5)})
+        const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
+        const tempoParaLeilao = dataLeilaoParaIniciar - now
+        if (tempoParaLeilao < 0) {
+          this.leilao.status = StatusLeilao.STATUS_EM_LEILAO
+          this.leilao.statusMessage = StatusLeilao.Status[StatusLeilao.STATUS_EM_LEILAO].title
+        }
       }
     },
     /**

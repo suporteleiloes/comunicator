@@ -1,5 +1,5 @@
 import {differenceInSeconds, isAfter, add, sub, parseISO} from 'date-fns'
-// import * as StatusLeilao from "../../../../helpers/LeilaoStatus.js"
+import * as StatusLeilao from "../../../../helpers/LeilaoStatus.js"
 import * as StatusLote from "../../../../helpers/LoteStatus.js"
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
@@ -34,7 +34,7 @@ const Cronometro = {
       return timer < 0 ? 0 : timer
     }, */
     isLoteEmPregao () {
-      return this.lote.status === StatusLote.STATUS_EM_PREGAO
+      return this.lote && this.lote.status === StatusLote.STATUS_EM_PREGAO
     },
     timerPregao () {
       const timeleft = this.timeUltimaAtividade
@@ -89,7 +89,7 @@ const Cronometro = {
   },
   mounted () {
     this.$nextTick(() => {
-      if (this.lote && this.lote.status < 5) {
+      if ((this.isCronometroSempreAtivo && this.leilao.status <=  StatusLeilao.STATUS_EM_LEILAO) || (this.lote && this.lote.status < 5)) {
         this.ativaTimer()
       }
     })
@@ -188,9 +188,15 @@ const Cronometro = {
     }*/
     ativaTimer () {
       console.log('Ativando timer...')
-      if (!this.lote.numero) {
-        console.log('Número do lote inválido, impossível ativar o cronometro', this.lote)
-        return
+      if (!this.lote || !this.lote.numero) {
+        if (this.isCronometroSempreAtivo && this.leilao.status <= StatusLeilao.STATUS_EM_LEILAO) {
+          if (!this.lote) {
+            this.lote = {numero: 1, status: StatusLote.STATUS_ABERTO_PARA_LANCES}
+          }
+        } else {
+          console.log('Número do lote inválido, impossível ativar o cronometro', this.lote)
+          return
+        }
       }
       if (!this.isRobo && !this.isLoteEmPregao && !this.isCronometroSempreAtivo) {
         return
@@ -248,7 +254,7 @@ const Cronometro = {
       this.$intervalCronometro = setInterval(cb, 1000)
     },
     desativaTimer (force = false) {
-      console.log('Desativando timer do lote', this.lote.numero)
+      this.lote && console.log('Desativando timer do lote', this.lote.numero)
       if (force !== true && (this.leilao.controleSimultaneo || this.leilao.cronometroSempreAtivo)) return
       this.counter = 0
       this.timeUltimaAtividade = null

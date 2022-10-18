@@ -16,7 +16,7 @@ const Lote = {
       return 'S/N'
     },
     isFechado () {
-      return Number(this.lote.status) !== Status.STATUS_ABERTO_PARA_LANCES
+      return Number(this.lote.status) > Status.STATUS_HOMOLOGANDO
     },
     isPermitidoLance () {
       return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
@@ -233,14 +233,14 @@ const Lote = {
     verificarAcoesRobo () {
       if (this.isRobo) {
         const timeleft = Math.round(this.timeUltimaAtividade / 1000)
-        if (timeleft > 0) {
-          if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
-            this.lote.status = LoteStatus.STATUS_EM_PREGAO
-          } else {
-            this.lote.status = LoteStatus.STATUS_ABERTO_PARA_LANCES
-          }
-        }
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
+          if (timeleft > 0) {
+            if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
+              this.lote.status = LoteStatus.STATUS_EM_PREGAO
+            } else {
+              this.lote.status = LoteStatus.STATUS_ABERTO_PARA_LANCES
+            }
+          }
           if (timeleft < -1 && timeleft > -6) {
             this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
           } else if (timeleft < -6) {

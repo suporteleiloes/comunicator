@@ -1,6 +1,7 @@
 import {differenceInSeconds, isAfter, add, sub, parseISO} from 'date-fns'
 import * as StatusLeilao from "../../../../helpers/LeilaoStatus.js"
 import * as StatusLote from "../../../../helpers/LoteStatus.js"
+import LoteStatus from "../../../../helpers/LoteStatus.js";
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
   isAfter = isAfter.default
@@ -85,6 +86,9 @@ const Cronometro = {
      */
     timerPregaoFormatado () {
       return this.timerPregao
+    },
+    percentTimeleft () {
+      return this.isRobo || this.isLoteEmPregao ? this.calcPercentTimer() : 100
     }
   },
   mounted () {
@@ -133,10 +137,15 @@ const Cronometro = {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
     },
-    calcPercentTimer (percent) {
-      const timeleft = this.timeUltimaAtividade
+    calcPercentTimer () {
+      const secondsLeft =  Math.floor(this.timeUltimaAtividade / 1000)
+      const timer = this.tempoCronometro
+      console.log('Seconds Left: ', secondsLeft)
+      console.log('Timer: ', timer)
+      if (secondsLeft > timer) return 100
+      if (secondsLeft <= 0) return 0
       // console.log('Downtimer', timeleft, (timeleft * (percent / 100)))
-      return (timeleft * (percent / 100))
+      return  Math.floor((secondsLeft * 100) / timer)
     },
     /*ativaTimer () {
       console.log('Ativando timer...')
@@ -199,6 +208,9 @@ const Cronometro = {
         }
       }
       if (!this.isRobo && !this.isLoteEmPregao && !this.isCronometroSempreAtivo) {
+        return
+      }
+      if (this.lote.status >= LoteStatus.STATUS_HOMOLOGANDO) {
         return
       }
       this.$intervalCronometro && clearInterval(this.$intervalCronometro)

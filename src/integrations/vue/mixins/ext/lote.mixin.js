@@ -21,6 +21,15 @@ const Lote = {
     isPermitidoLance () {
       return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
     },
+    isPermitidoLanceParcelado () {
+      return this.leilao.permitirParcelamento && this.lote.permitirParcelamento
+    },
+    lanceParceladoEntradaMinima () {
+      if (this.lote.parcelamentoMinimoEntrada !== this.leilao.parcelamentoMinimoEntrada) {
+        return this.lote.parcelamentoMinimoEntrada
+      }
+      return this.leilao.parcelamentoMinimoEntrada
+    },
     loteStatusString () {
       if (this.lote.status === null) {
         return '-'
@@ -67,10 +76,10 @@ const Lote = {
     },
     valorAtual () {
       if (!this.ultimoLance) {
-        if (!this.lote.valorInicial) {
+        if (!this.lote.valorInicial) { // @TODO: Praca 2 e 3 ?
           return 0
         }
-        return Number(this.lote.valorInicial)
+        return Number(this.lote.valorInicial )// @TODO: Praca 2 e 3 ?
       }
       return Number(this.ultimoLance.valor)
     },
@@ -236,8 +245,10 @@ const Lote = {
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
           if (timeleft > 0) {
             if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
+              console.log('Lote 1', timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_EM_PREGAO
             } else {
+              console.log('XXX Lote 1', timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_ABERTO_PARA_LANCES
             }
           }

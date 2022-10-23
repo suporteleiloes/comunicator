@@ -26,6 +26,11 @@ import {sub, parseISO} from 'date-fns'
 
 const Component = {
   mixins: [Events, Cronometro, Lote, UserActions],
+  provide: function () {
+    return {
+      product: this
+    }
+  },
   data () {
     return {
       leilao: null,
@@ -62,6 +67,9 @@ const Component = {
     },
     tempoIntervaloEntreLotes () {
       return this.leilao.timerIntervalo || 0
+    },
+    isPermitidoLanceAutomatico () {
+      return this.leilao.permitirLanceAutomatico
     }
   },
   mounted() {

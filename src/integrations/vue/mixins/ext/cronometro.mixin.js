@@ -140,8 +140,8 @@ const Cronometro = {
     calcPercentTimer () {
       const secondsLeft =  Math.floor(this.timeUltimaAtividade / 1000)
       const timer = this.tempoCronometro
-      console.log('Seconds Left: ', secondsLeft)
-      console.log('Timer: ', timer)
+      // console.log('Seconds Left: ', secondsLeft)
+      // console.log('Timer: ', timer)
       if (secondsLeft > timer) return 100
       if (secondsLeft <= 0) return 0
       // console.log('Downtimer', timeleft, (timeleft * (percent / 100)))
@@ -197,6 +197,7 @@ const Cronometro = {
     }*/
     ativaTimer () {
       console.log('Ativando timer...')
+      this.desativaTimer(true)
       if (!this.lote || !this.lote.numero) {
         if (this.isCronometroSempreAtivo && this.leilao.status <= StatusLeilao.STATUS_EM_LEILAO) {
           if (!this.lote) {
@@ -213,10 +214,9 @@ const Cronometro = {
       if (this.lote.status >= LoteStatus.STATUS_HOMOLOGANDO) {
         return
       }
-      this.$intervalCronometro && clearInterval(this.$intervalCronometro)
       const cb = () => {
         let ultimaAtividade
-        console.log('TIMER LOTE ', this.lote.numero)
+        // console.log('TIMER LOTE ', this.lote.numero)
         const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
         if (this.isRobo) {
           let loteNumero = Number(this.lote.numero)
@@ -238,7 +238,7 @@ const Cronometro = {
               this.desativaTimer(true)
               return
             }
-            console.log('!!! TEM PREGÃO: ', pregao)
+            // console.log('!!! TEM PREGÃO: ', pregao)
             ultimaAtividade = parseISO(pregao.dataAbertura.date)
             ultimaAtividade = add(ultimaAtividade, {seconds: (this.tempoCronometro)})
           }
@@ -246,14 +246,14 @@ const Cronometro = {
         if (this.ultimoLance) {
           // Existe lance. Verificar se o lance é antes ou depois do status pregao
           const dataLance = parseISO(this.ultimoLance.data.date)
-          console.log('!!! TEM LANCE: ', dataLance)
+          // console.log('!!! TEM LANCE: ', dataLance)
           if (isAfter(dataLance, sub(ultimaAtividade, {seconds: this.leilao.timerPregao}))) {
             // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
             // this.ativaTimer(dataLance)
-            console.log('!!! LANCE DEPOIS DO PREGÃO')
+            // console.log('!!! LANCE DEPOIS DO PREGÃO')
             ultimaAtividade = add(dataLance, {seconds: this.leilao.timerPregao})
           } else {
-            console.log('!!! LANCE ANTES DO PREGÃO')
+            // console.log('!!! LANCE ANTES DO PREGÃO')
             // Calcula cronometro baseando-se na data de abertura do pregao
             // this.ativaTimer(dataPregao)
           }

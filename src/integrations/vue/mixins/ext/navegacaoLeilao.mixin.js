@@ -1,3 +1,5 @@
+// @deprecated
+/*
 let isBinded = false
 
 const Mixin = {
@@ -10,10 +12,10 @@ const Mixin = {
     this.unbindEvents()
   },
   methods: {
-    /**
+    /!**
      * Bind all events from realtime.
      * Is necessary to exists comunicator and comunicatorClass in the context
-     */
+     *!/
     bindEvents () {
       if (!isBinded) {
         console.log(this.comunicator)
@@ -53,3 +55,4 @@ const Mixin = {
 }
 
 export default Mixin
+*/

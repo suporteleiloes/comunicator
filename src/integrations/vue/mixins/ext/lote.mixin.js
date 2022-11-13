@@ -84,6 +84,18 @@ const Lote = {
       }
       return Number(this.ultimoLance.valor)
     },
+    valorInicialAtual () {
+      if (this.leilao.instancia === 1) {
+        return Number(this.lote.valorInicial)
+      }
+      if (this.leilao.praca === 2) {
+        return Number(this.lote.valorInicial2)
+      }
+      if (this.leilao.praca === 3) {
+        return Number(this.lote.valorInicial3)
+      }
+      return Number(this.lote.valorInicial)
+    },
     lanceMinimo () {
       if (this.ultimoLance) {
         return Number(this.ultimoLance.valor) + Number(this.lote.valorIncremento)

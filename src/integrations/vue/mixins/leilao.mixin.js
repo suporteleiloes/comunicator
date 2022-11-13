@@ -36,7 +36,6 @@ const Component = {
       leilao: null,
       loteAnterior: null,
       loteProximo: null,
-      hasNovoLance: false,
       valorLance: 0.00,
       parcelamento: null,
       isLancando: false,

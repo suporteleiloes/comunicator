@@ -3,7 +3,8 @@ import LoteStatus from "../../../../helpers/LoteStatus.js";
 const Lote = {
   data () {
     return {
-      lote: null
+      lote: null,
+      hasNovoLance: false
     }
   },
   computed: {
@@ -16,7 +17,7 @@ const Lote = {
       return 'S/N'
     },
     isFechado () {
-      return Number(this.lote.status) > Status.STATUS_HOMOLOGANDO
+      return Number(this.lote.status) > Status.STATUS_HOMOLOGANDO && Number(this.lote.status) < 1000
     },
     isPermitidoLance () {
       return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
@@ -148,6 +149,13 @@ const Lote = {
         }
         !testFind && this.lote.lances.unshift(lance)
         this.ativaTimer() // TMP
+        if (this.$timeoutNovoLance) {
+          clearTimeout(this.$timeoutNovoLance)
+        }
+        this.hasNovoLance = true
+        this.$timeoutNovoLance = setTimeout(() => {
+          this.hasNovoLance = false
+        }, 5000)
       })
     },
     /**
@@ -189,7 +197,7 @@ const Lote = {
     },
     __alteracaoLote (data) {
       console.log('Altera dados do lote', data)
-      if (this.lote.id !== data.lote.id) return
+      if (!this.lote || this.lote.id !== data.lote.id) return
       this.lote = Object.assign({}, this.lote, data.lote)
       this.ativaTimer()
     },

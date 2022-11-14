@@ -19,6 +19,9 @@ const Lote = {
     isFechado () {
       return Number(this.lote.status) > Status.STATUS_HOMOLOGANDO && Number(this.lote.status) < 1000
     },
+    isLotePregao () {
+      return Number(this.lote.status) === Status.STATUS_EM_PREGAO
+    },
     isPermitidoLance () {
       return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
     },

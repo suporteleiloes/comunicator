@@ -10,7 +10,13 @@ const Lote = {
   computed: {
     loteNumero () {
       if (this.lote && this.lote.numero && this.lote.numero !== 'null' && !Number.isNaN(Number(this.lote.numero))) {
-        const str = String(this.lote.numero)
+        return String(this.lote.numeroString || this.lote.numero)
+      }
+      return 'S/N'
+    },
+    loteNumeroPad () {
+      if (this.lote && this.lote.numero && this.lote.numero !== 'null' && !Number.isNaN(Number(this.lote.numero))) {
+        const str = String(this.lote.numeroString || this.lote.numero)
         const pad = '000'
         return pad.substring(0, pad.length - str.length) + str
       }
@@ -28,11 +34,14 @@ const Lote = {
     isPermitidoLanceParcelado () {
       return this.leilao.permitirParcelamento && this.lote.permitirParcelamento
     },
+    isHomologando () {
+      return Number(this.lote.status) === Status.STATUS_HOMOLOGANDO
+    },
     lanceParceladoEntradaMinima () {
       if (this.lote.parcelamentoMinimoEntrada !== this.leilao.parcelamentoMinimoEntrada) {
-        return this.lote.parcelamentoMinimoEntrada
+        return this.lote.parcelamentoMinimoEntrada ?? 0
       }
-      return this.leilao.parcelamentoMinimoEntrada
+      return this.leilao.parcelamentoMinimoEntrada ?? 0
     },
     loteStatusString () {
       if (this.lote.status === null) {
@@ -48,12 +57,14 @@ const Lote = {
       if (this.lote.bem.image) {
         fotos.push({id: 0, url: this.lote.bem.image.min.url, full: this.lote.bem.image.full.url})
       }
-      const fotosSite = this.lote.bem.arquivos.slice().filter(ft => ft.site)
-      if (fotosSite && fotosSite.length) {
-        return [
-          ...fotos,
-          ...fotosSite
-        ]
+      if (this.lote.bem.arquivos && this.lote.bem.arquivos.length) {
+        const fotosSite = this.lote.bem.arquivos.slice().filter(ft => ft.site)
+        if (fotosSite && fotosSite.length) {
+          return [
+            ...fotos,
+            ...fotosSite
+          ]
+        }
       }
       return fotos
     },
@@ -80,10 +91,10 @@ const Lote = {
     },
     valorAtual () {
       if (!this.ultimoLance) {
-        if (!this.lote.valorInicial) { // @TODO: Praca 2 e 3 ?
+        if (!this.valorInicialAtual) { // @TODO: Praca 2 e 3 ?
           return 0
         }
-        return Number(this.lote.valorInicial )// @TODO: Praca 2 e 3 ?
+        return Number(this.valorInicialAtual )// @TODO: Praca 2 e 3 ?
       }
       return Number(this.ultimoLance.valor)
     },
@@ -133,7 +144,6 @@ const Lote = {
      * @returns {boolean}
      */
     isLoteComunication (loteId) {
-      console.log(this.lote, this)
       if (!loteId) return false
       if (!this.lote) return false
       return loteId === this.lote.id
@@ -171,6 +181,7 @@ const Lote = {
         this.$timeoutNovoLance = setTimeout(() => {
           this.hasNovoLance = false
         }, 5000)
+        this.notifica && this.notifica('lance', lance)
       })
     },
     /**
@@ -224,6 +235,7 @@ const Lote = {
     __alteracaoIncrementoLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
+      this.notifica && this.notifica('alteracaoIncremento', data)
     },
 
     /**
@@ -234,6 +246,7 @@ const Lote = {
     __alteracaoValorInicialLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
+      this.notifica && this.notifica('alteracaoValorInicial', data)
     },
 
     /**
@@ -244,6 +257,7 @@ const Lote = {
     __alteracaoValorMinimoLote (data) {
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
+      this.notifica && this.notifica('alteracaoMinimo', data)
     },
 
     /**
@@ -261,6 +275,7 @@ const Lote = {
           this.ativaTimer()
         })
       }
+      this.notifica && this.notifica('statusLote', data)
     },
     verificarAcoesRobo () {
       if (this.isRobo) {
@@ -268,10 +283,10 @@ const Lote = {
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
           if (timeleft > 0) {
             if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
-              console.log('Lote 1', timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
+              // console.log('Lote ' + this.lote.numero, timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_EM_PREGAO
             } else {
-              console.log('XXX Lote 1', timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
+              // console.log('XXX Lote ' + this.lote.numero, timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_ABERTO_PARA_LANCES
             }
           }

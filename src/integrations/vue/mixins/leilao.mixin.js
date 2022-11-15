@@ -137,6 +137,7 @@ const Component = {
       if (this.lote.status === 2) {
         this.ativaTimer()
       }
+      this.notifica && this.notifica('mudaLote', data)
     },
     __alteracaoLeilao (data) {
       console.log('Altera dados do leilão', data)
@@ -144,6 +145,7 @@ const Component = {
       if (this.leilao.id !== data.leilao.id) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
       this.ativaTimer()
+      this.notifica && this.notifica('alteracaoLeilao', data)
     },
     /**
      * Altera o status do leilão
@@ -153,6 +155,7 @@ const Component = {
     __statusLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+      this.notifica && this.notifica('statusLeilao', data)
     },
     /**
      * Altera o video da live do leilão
@@ -162,6 +165,7 @@ const Component = {
     __liveLeilao (data) {
       if (!this.isLeilaoComunication(data)) return
       this.leilao = Object.assign({}, this.leilao, data.leilao)
+      this.notifica && this.notifica('liveLeilao', data)
     },
     /**
      * Processa um comando adicional

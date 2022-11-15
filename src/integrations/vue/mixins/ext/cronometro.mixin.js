@@ -1,7 +1,7 @@
 import {differenceInSeconds, isAfter, add, sub, parseISO} from 'date-fns'
 import * as StatusLeilao from "../../../../helpers/LeilaoStatus.js"
 import * as StatusLote from "../../../../helpers/LoteStatus.js"
-import LoteStatus from "../../../../helpers/LoteStatus.js";
+import LoteStatus, {STATUS_PREGAO} from "../../../../helpers/LoteStatus.js";
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
   isAfter = isAfter.default
@@ -35,7 +35,7 @@ const Cronometro = {
       return timer < 0 ? 0 : timer
     }, */
     isLoteEmPregao () {
-      return this.lote && this.lote.status === StatusLote.STATUS_EM_PREGAO
+      return this.lote && StatusLote.STATUS_PREGAO.includes(this.lote.status)
     },
     timerPregao () {
       const timeleft = this.timeUltimaAtividade

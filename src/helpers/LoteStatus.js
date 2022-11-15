@@ -9,7 +9,12 @@ export const STATUS_BAIXA_OFERTA = 9
 export const STATUS_RETIRADO = 10
 export const STATUS_CANCELADO = 11
 
+export const STATUS_FAKE_DOULHE_UMA = 10001
+export const STATUS_FAKE_DOULHE_DUAS = 10002
+
 export const STATUS_QUE_PRECISA_DE_LANCES = [STATUS_VENDIDO, STATUS_CONDICIONAL, STATUS_BAIXA_OFERTA]
+
+export const STATUS_PREGAO = [STATUS_EM_PREGAO, STATUS_FAKE_DOULHE_UMA, STATUS_FAKE_DOULHE_DUAS]
 
 export const Status = {
   [STATUS_RASCUNHO]: {title: 'Rascunho', class: 'lote-status-' + STATUS_RASCUNHO},
@@ -27,8 +32,8 @@ export const Status = {
 export const StatusFake = {
   ...Status,
   // Status fake, somente para mock data
-  10001: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
-  10002: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar
+  STATUS_FAKE_DOULHE_UMA: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
+  STATUS_FAKE_DOULHE_DUAS: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar
 }
 
 export default {

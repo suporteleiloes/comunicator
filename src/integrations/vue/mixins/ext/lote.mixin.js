@@ -91,10 +91,10 @@ const Lote = {
     },
     valorAtual () {
       if (!this.ultimoLance) {
-        if (!this.valorInicialAtual) { // @TODO: Praca 2 e 3 ?
+        if (!this.valorInicialAtual) {
           return 0
         }
-        return Number(this.valorInicialAtual )// @TODO: Praca 2 e 3 ?
+        return Number(this.valorInicialAtual)
       }
       return Number(this.ultimoLance.valor)
     },

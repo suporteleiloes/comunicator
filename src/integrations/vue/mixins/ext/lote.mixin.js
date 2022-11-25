@@ -39,9 +39,9 @@ const Lote = {
     },
     lanceParceladoEntradaMinima () {
       if (this.lote.parcelamentoMinimoEntrada !== this.leilao.parcelamentoMinimoEntrada) {
-        return this.lote.parcelamentoMinimoEntrada ?? 0
+        return this.lote.parcelamentoMinimoEntrada || 0
       }
-      return this.leilao.parcelamentoMinimoEntrada ?? 0
+      return this.leilao.parcelamentoMinimoEntrada || 0
     },
     loteStatusString () {
       if (this.lote.status === null) {

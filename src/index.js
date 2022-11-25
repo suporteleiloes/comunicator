@@ -35,7 +35,9 @@ class Comunicator {
     return new Promise((resolve, reject) => {
       this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
         transformRequest: [function (data, headers) {
-          delete headers.common.Authorization
+          if (headers && headers.common && headers.common.Authorization) {
+            delete headers.common.Authorization
+          }
           return data;
         }]
       })

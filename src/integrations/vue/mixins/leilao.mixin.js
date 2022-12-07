@@ -69,6 +69,9 @@ const Component = {
     },
     isPermitidoLanceAutomatico () {
       return this.leilao.permitirLanceAutomatico
+    },
+    isCronometroIncremental () {
+      return this.leilao.tipoCronometro && Number(this.leilao.tipoCronometro) === 1
     }
   },
   mounted() {
@@ -177,6 +180,19 @@ const Component = {
       if (data.comando === 'doulhe') {
         if (!this.isLoteComunication(data.parametros.id)) return
         this.lote.status = (10000 + Number(data.parametros.doulhe))
+      }
+      if (data.comando === 'reload') {
+        if (data.entity && data.entity === 'leilao' && data.entityId && data.entityId === this.leilao.id) {
+          /* try{
+            if (location && location.reload()) {}
+            else {
+              this.load && this.load()
+            }
+          } catch (e) {
+            this.load && this.load()
+          } */
+          this.load && this.load()
+        }
       }
       this.proccessCommand && this.proccessCommand(data)
     }

@@ -282,7 +282,7 @@ const Lote = {
         const timeleft = Math.round(this.timeUltimaAtividade / 1000)
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
           if (timeleft > 0) {
-            if (timeleft <= this.tempoCronometro || (Number(this.lote.numero) === 1 && timeleft <= Math.abs(this.tempoIntervaloPrimeiroLote))) {
+            if (timeleft <= this.tempoCronometro) {
               // console.log('Lote ' + this.lote.numero, timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_EM_PREGAO
             } else {
@@ -291,13 +291,19 @@ const Lote = {
             }
           }
           if (timeleft < -1 && timeleft > -6) {
-            this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
+            if (this.lote.status < LoteStatus.STATUS_HOMOLOGANDO) {
+              this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
+            }
           } else if (timeleft < -6) {
-            if (this.ultimoLance) {
+            // @TODO: Chamar Stats para verificar homologação.
+            if (this.lote.status < LoteStatus.STATUS_HOMOLOGANDO) {
+              this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
+            }
+            /* if (this.ultimoLance) {
               this.lote.status = LoteStatus.STATUS_VENDIDO
             } else {
               this.lote.status = LoteStatus.STATUS_SEM_LICITANTES
-            }
+            } */
           }
         }
       }

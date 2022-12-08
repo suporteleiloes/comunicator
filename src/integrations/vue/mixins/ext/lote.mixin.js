@@ -299,11 +299,11 @@ const Lote = {
             if (this.lote.status < LoteStatus.STATUS_HOMOLOGANDO) {
               this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
             }
-            /* if (this.ultimoLance) {
+            if (this.ultimoLance) {
               this.lote.status = LoteStatus.STATUS_VENDIDO
             } else {
               this.lote.status = LoteStatus.STATUS_SEM_LICITANTES
-            } */
+            }
           }
         }
       }

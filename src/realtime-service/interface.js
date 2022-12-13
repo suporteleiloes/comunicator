@@ -68,6 +68,12 @@ const Comunicator = (function () {
     this._interceptors = [];
 
     /**
+     * Topics subscribe
+     * @type {*[]}
+     */
+    this.$_topics = [];
+
+    /**
      * Class for Comunication provider
      */
     if (typeof ComunicatorInterface !== 'undefined') {
@@ -240,7 +246,8 @@ const Comunicator = (function () {
    * @param Mixed data
    */
   Comunication.prototype.parseMessage = function (_event) {
-    _log('Message received: ', null, _event)
+    _log('Message received: ')
+    _log(_event)
     if (this._interceptors && this._interceptors.length) {
       this._interceptors.map(fcn => {
         fcn && fcn(_event)
@@ -257,6 +264,15 @@ const Comunicator = (function () {
     } catch (e) {
       _log('Invalid message, ignoring comunication. Reason: Message must be a valid JSON');
       return;
+    }
+
+    if (typeof event['_client'] !== 'undefined') {
+      _log('Event with client predefined, need to check topics');
+      if (!this.$_topics.includes(event['_client'])) {
+        _log('You are not subscribed to the topic');
+        return;
+      }
+      _log('Topic check');
     }
 
     if (typeof event['type'] === 'undefined') {
@@ -285,6 +301,12 @@ const Comunicator = (function () {
    */
   Comunication.prototype.subscribe = function (topic) {
     _log(`Subscribe on topic ${topic}`, 1);
+    if (!this.$_topics.includes(topic)) {
+      this.$_topics.push(topic)
+      _log(`Subscribe on ${topic} is now enabled`, 1);
+    } else {
+      _log(`Subscribe on ${topic} already exists, nothing to do`, 1);
+    }
   };
 
   /**
@@ -293,6 +315,12 @@ const Comunicator = (function () {
    */
   Comunication.prototype.unsubscribe = function (topic) {
     _log(`Unsubscribe on topic ${topic}`, 1);
+    if (this.$_topics.includes(topic)) {
+      this.$_topics.push(topic)
+      _log(`Unsubscribe on ${topic} successfully`, 1);
+    } else {
+      _log(`Unsubscribe on ${topic} is not necessary because topic is not subscribed, nothing to do`, 1);
+    }
   };
 
   return {

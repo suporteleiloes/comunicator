@@ -156,10 +156,16 @@ const Cronometro = {
         return
       }
       const cb = () => {
-        let ultimaAtividade
+        let ultimaAtividade, dataLimiteLances
         const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
         if (this.isRobo) {
           ultimaAtividade = this.lote.dataFechamento ? parseISO(this.lote.dataFechamento.date) : parseISO(this.leilao.dataProximoLeilao.date)
+          if (this.lote.dataLimiteLances) {
+            dataLimiteLances = parseISO(this.lote.dataLimiteLances.date)
+            if (isAfter(dataLimiteLances, ultimaAtividade)) {
+              ultimaAtividade = dataLimiteLances
+            }
+          }
         } else {
           if (this.isCronometroSempreAtivo) {
             ultimaAtividade = parseISO(this.leilao.dataProximoLeilao.date)
@@ -176,6 +182,7 @@ const Cronometro = {
           }
         }
         if (this.ultimoLance) {
+          const fechamento = this.lote.dataFechamento ? parseISO(this.lote.dataFechamento.date) : parseISO(this.leilao.dataProximoLeilao.date)
           // Existe lance. Verificar se o lance é antes ou depois do status pregao
           const dataLance = parseISO(this.ultimoLance.data.date)
           // console.log('!!! TEM LANCE: ', dataLance)
@@ -183,7 +190,31 @@ const Cronometro = {
             // Lance foi depois da abertura do pregão do lote, calcular o cronômetro baseando-se na data do lance
             // this.ativaTimer(dataLance)
             // console.log('!!! LANCE DEPOIS DO PREGÃO')
-            ultimaAtividade = add(dataLance, {seconds: this.leilao.timerPregao})
+            if (this.leilao.tipoCronometro === 1) {
+              let intervalo
+              if (this.penultimoLance && isAfter(parseISO(this.penultimoLance.data.date), fechamento)) {
+                // Calcula o intervalo entre o penultimo lance e o lance e soma ao tempo do cronometro
+                intervalo = differenceInSeconds(dataLance, add(parseISO(this.penultimoLance.data.date), {seconds: this.leilao.timerPregao}))
+                console.log('%cINTERVALO PUL: ' + intervalo, 'font-size: 16px; color: red')
+                console.log('Penultimo lance: ', parseISO(this.penultimoLance.data.date))
+                console.log('Lance: ', dataLance)
+              } else {
+                // Calcula o intervalo entre o lance e a abertura do lote e soma ao tempo do cronometro
+                intervalo = differenceInSeconds(dataLance, fechamento)
+                console.log('%cINTERVALO: ' + intervalo, 'font-size: 16px')
+                console.log('Fechamento: ', fechamento)
+                console.log('Lance: ', dataLance)
+              }
+              if (intervalo >= 0) {
+                intervalo = 0
+              } else {
+                intervalo = Math.abs(intervalo)
+              }
+              console.log('Intervalo é ', intervalo)
+              ultimaAtividade = add(dataLance, {seconds: (this.leilao.timerPregao + intervalo)})
+            } else {
+              ultimaAtividade = add(dataLance, {seconds: this.leilao.timerPregao})
+            }
           } else {
             // console.log('!!! LANCE ANTES DO PREGÃO')
             // Calcula cronometro baseando-se na data de abertura do pregao

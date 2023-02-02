@@ -83,6 +83,12 @@ const Lote = {
       }
       return this.lote.lances[0]
     },
+    penultimoLance () {
+      if (!this.lote.lances || !this.lote.lances.length) {
+        return null
+      }
+      return this.lote.lances.length > 1 ? this.lote.lances[1] : null
+    },
     lanceLocalidade () {
       if (this.ultimoLance) {
         return `${this.ultimoLance.autor.cidade} - ${this.ultimoLance.autor.uf}`
@@ -155,6 +161,7 @@ const Lote = {
      * @private
      */
     __parseLance (loteId, lance) {
+      this.notifica && this.notifica('lance', lance)
       if (!this.isLoteComunication(loteId)) return
       this.__addLance(lance)
     },
@@ -181,7 +188,6 @@ const Lote = {
         this.$timeoutNovoLance = setTimeout(() => {
           this.hasNovoLance = false
         }, 5000)
-        this.notifica && this.notifica('lance', lance)
       })
     },
     /**
@@ -266,6 +272,7 @@ const Lote = {
      * @private
      */
     __statusLote (data) {
+      this.notifica && this.notifica('statusLote', data)
       if (!this.isLoteComunication(data.lote.id)) return
       this.lote = Object.assign({}, this.lote, data.lote)
       if (data.lote.status !== 2) {
@@ -275,7 +282,6 @@ const Lote = {
           this.ativaTimer()
         })
       }
-      this.notifica && this.notifica('statusLote', data)
     },
     verificarAcoesRobo () {
       if (this.isRobo) {
@@ -300,9 +306,9 @@ const Lote = {
               this.lote.status = LoteStatus.STATUS_HOMOLOGANDO
             }
             if (this.ultimoLance) {
-              this.lote.status = LoteStatus.STATUS_VENDIDO
+              // this.lote.status = LoteStatus.STATUS_VENDIDO
             } else {
-              this.lote.status = LoteStatus.STATUS_SEM_LICITANTES
+              // this.lote.status = LoteStatus.STATUS_SEM_LICITANTES
             }
           }
         }

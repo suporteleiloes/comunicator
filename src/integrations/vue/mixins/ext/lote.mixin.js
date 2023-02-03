@@ -184,6 +184,9 @@ const Lote = {
         if (this.$timeoutNovoLance) {
           clearTimeout(this.$timeoutNovoLance)
         }
+        if (lance.lote && lance.lote.dataLimiteLances) {
+          this.lote.dataLimiteLancesg = lance.lote.dataLimiteLances
+        }
         this.hasNovoLance = true
         this.$timeoutNovoLance = setTimeout(() => {
           this.hasNovoLance = false

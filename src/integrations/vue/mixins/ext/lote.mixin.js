@@ -182,10 +182,10 @@ const Lote = {
         !testFind && this.lote.lances.unshift(lance)
         this.ativaTimer() // TMP
         if (this.$timeoutNovoLance) {
-          clearTimeout(this.$timeoutNovoLance)
+          clearTimeout(this.$timeoutNovoLance) //
         }
         if (lance.lote && lance.lote.dataLimiteLances) {
-          this.lote.dataLimiteLancesg = lance.lote.dataLimiteLances
+          this.lote.dataLimiteLances = lance.lote.dataLimiteLances
         }
         this.hasNovoLance = true
         this.$timeoutNovoLance = setTimeout(() => {

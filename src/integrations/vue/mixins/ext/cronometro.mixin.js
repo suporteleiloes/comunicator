@@ -139,17 +139,17 @@ const Cronometro = {
     ativaTimer () {
       console.log('Ativando timer...')
       this.desativaTimer(true)
-      if (!this.lote || !this.lote.numero) {
+      if (!this.lote) {
         if (this.isCronometroSempreAtivo && this.leilao.status <= StatusLeilao.STATUS_EM_LEILAO) {
           if (!this.lote) {
             this.lote = {numero: 1, status: StatusLote.STATUS_ABERTO_PARA_LANCES}
           }
         } else {
-          console.log('Número do lote inválido, impossível ativar o cronometro', this.lote)
+          console.log('Lote inválido, impossível ativar o cronometro', this.lote)
           return
         }
       }
-      if (!this.isRobo && !this.isLoteEmPregao && !this.isCronometroSempreAtivo) {
+      if ((!this.isRobo || !this.isControleSimultaneo) && !this.isLoteEmPregao && !this.isCronometroSempreAtivo) {
         return
       }
       if (this.lote.status >= LoteStatus.STATUS_HOMOLOGANDO) {

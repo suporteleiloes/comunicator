@@ -116,6 +116,7 @@ const Component = {
         console.error('Não é possível abrir o leilão sem um lote ativo')
         return
       }
+      if (typeof this.seguirLeilao !== 'undefined' && this.seguirLeilao === false) return
       this.lote = data.leilao.pregaoAtivo.lote
     },
     /**

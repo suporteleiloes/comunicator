@@ -32,8 +32,8 @@ export const Status = {
 export const StatusFake = {
   ...Status,
   // Status fake, somente para mock data
-  [STATUS_FAKE_DOULHE_UMA]: {title: 'Doulhe-uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
-  [STATUS_FAKE_DOULHE_DUAS]: {title: 'Doulhe-duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar
+  [STATUS_FAKE_DOULHE_UMA]: {title: 'Dou-lhe uma', class: 'lote-status-doulhe-uma'}, // @TODO: Reajustar
+  [STATUS_FAKE_DOULHE_DUAS]: {title: 'Dou-lhe duas', class: 'lote-status-doulhe-duas'} // @TODO: Reajustar
 }
 
 export default {

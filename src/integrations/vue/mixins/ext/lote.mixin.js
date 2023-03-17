@@ -37,12 +37,6 @@ const Lote = {
     isHomologando () {
       return Number(this.lote.status) === Status.STATUS_HOMOLOGANDO
     },
-    lanceParceladoEntradaMinima () {
-      if (this.lote.parcelamentoMinimoEntrada !== this.leilao.parcelamentoMinimoEntrada) {
-        return this.lote.parcelamentoMinimoEntrada || 0
-      }
-      return this.leilao.parcelamentoMinimoEntrada || 0
-    },
     loteStatusString () {
       if (this.lote.status === null) {
         return '-'
@@ -137,6 +131,38 @@ const Lote = {
       }
       return this.lote.lances
       // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
+    },
+    maximoParcelas () {
+      if (!this.hasParcelamentoLote) {
+        return this.leilao.parcelamentoQtdParcelas
+      }
+      return this.lote.parcelamentoQtdParcelas
+    },
+    parcelamentoEntrada () {
+      if (!this.hasParcelamentoLote) {
+        return this.leilao.parcelamentoMinimoEntrada
+      }
+      return this.lote.parcelamentoMinimoEntrada
+    },
+    parcelas () {
+      const parcelas = parseInt(this.maximoParcelas)
+      if (!parcelas || isNaN(parcelas)) {
+        return [{label: '1 vez', value: 1}]
+      }
+      const p = []
+      for (let i = 2; i <= parseInt(parcelas); i++) {
+        p.push({label: i + ' vezes', value: Number(i)})
+      }
+      return p
+    },
+    lanceParceladoEntradaMinima () {
+      if (this.lote.parcelamentoMinimoEntrada !== this.leilao.parcelamentoMinimoEntrada) {
+        return this.lote.parcelamentoMinimoEntrada || 0
+      }
+      return this.leilao.parcelamentoMinimoEntrada || 0
+    },
+    lanceParceladoError () {
+      return Number(this.lanceParceladoEntrada) < this.lanceParceladoEntradaMinima
     }
   },
   mounted () {

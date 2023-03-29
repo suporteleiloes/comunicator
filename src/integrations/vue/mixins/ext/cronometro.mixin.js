@@ -1,7 +1,7 @@
 import {differenceInSeconds, isAfter, add, sub, parseISO} from 'date-fns'
 import * as StatusLeilao from "../../../../helpers/LeilaoStatus.js"
 import * as StatusLote from "../../../../helpers/LoteStatus.js"
-import LoteStatus, {STATUS_PREGAO} from "../../../../helpers/LoteStatus.js";
+import LoteStatus, {STATUS_FAKE_DOULHE_UMA, STATUS_PREGAO} from "../../../../helpers/LoteStatus.js";
 if (differenceInSeconds.default) {
   differenceInSeconds = differenceInSeconds.default
   isAfter = isAfter.default
@@ -152,7 +152,7 @@ const Cronometro = {
       if ((!this.isRobo || !this.isControleSimultaneo) && !this.isLoteEmPregao && !this.isCronometroSempreAtivo) {
         return
       }
-      if (this.lote.status >= LoteStatus.STATUS_HOMOLOGANDO) {
+      if (this.lote.status >= LoteStatus.STATUS_HOMOLOGANDO && this.lote.status !== StatusLote.STATUS_FAKE_DOULHE_UMA && this.lote.status !== StatusLote.STATUS_FAKE_DOULHE_DUAS) {
         return
       }
       const cb = () => {

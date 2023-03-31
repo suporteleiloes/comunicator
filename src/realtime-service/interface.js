@@ -307,6 +307,7 @@ const Comunicator = (function () {
     } else {
       _log(`Subscribe on ${topic} already exists, nothing to do`, 1);
     }
+    return true
   };
 
   /**

@@ -14,6 +14,7 @@ const Cronometro = {
     return {
       counter: 0,
       timeUltimaAtividade: null,
+      hideTimer: false,
       timeLimite: null,
       servertime: null
     }
@@ -197,7 +198,18 @@ const Cronometro = {
             // this.ativaTimer(dataPregao)
           }
         }
-        this.timeUltimaAtividade = ultimaAtividade - now
+
+        const diff = ultimaAtividade - now
+        this.timeUltimaAtividade = diff
+
+        if (!this.isControleSimultaneo && this.lote.status < LoteStatus.STATUS_EM_PREGAO && diff < this.leilao.timerPregao) {
+          this.timeUltimaAtividade = this.leilao.timerPregao * 1000
+          this.hideTimer = true
+          return
+        }
+
+        this.hideTimer = false
+
         this.verificarAcoesRobo()
         this.verificarAcoesLeilaoRobo()
       }

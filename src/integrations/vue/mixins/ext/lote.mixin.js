@@ -1,5 +1,5 @@
 import Status from '../../../../helpers/LoteStatus.js'
-import LoteStatus from "../../../../helpers/LoteStatus.js";
+import LoteStatus from '../../../../helpers/LoteStatus.js'
 const Lote = {
   data () {
     return {
@@ -166,10 +166,59 @@ const Lote = {
     }
   },
   mounted () {
+    this.ativaVerificacoesAutomaticas()
   },
   beforeDestroy () {
+    this.desativaVerificacoesAutomaticas()
   },
   methods: {
+    ativaVerificacoesAutomaticas () {
+      if (!this.autorizaVerificacoesAutomaticas) return
+      let pass = true
+      if (!this.lote || this.lote.status > LoteStatus.STATUS_EM_PREGAO) {
+        pass = false
+      }
+      this.desativaVerificacoesAutomaticas()
+      if (!pass) return
+      this.$intervalVerificacoesAutomaticas = setInterval(() => {
+        if (this.lote.status > LoteStatus.STATUS_EM_PREGAO){
+          this.desativaVerificacoesAutomaticas()
+          return
+        }
+        /**
+         * Verifica se o lance vencedor atual é do usuário, se sim, verifica se houve mais algum lance
+         * Prevenção para evitar falha de conexão e consequentemente perda de transmissões do Websocket
+         */
+          if (this.ultimoLance && this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id === this.ultimoLance.autor.id) {
+            console.log('== Rotinas automáticas do lote ', this.lote ? this.lote.id : null)
+            this.comunicatorClass.getSimpleLoteData(this.lote.id)
+                .then((response) => {
+                  const lt = response.data
+                  if (!this.lote || !lt || lt.id !== this.lote.id) {
+                    console.error('ID do lote não bate')
+                    return
+                  }
+                  if (!lt.ultimoLance || !lt.ultimoLance.length) {
+                    // todo?
+                    return
+                  }
+                  const ultimoLance = lt.ultimoLance[0]
+                  if (!this.ultimoLance || this.ultimoLance.id !== ultimoLance.id) {
+                    this.__parseLance(this.lote.id, ultimoLance)
+                  }
+                })
+                .catch(error => {
+                  console.error(error)
+                  this.erroSincroniaLoteApi && this.erroSincroniaLoteApi(error)
+                })
+          }
+      }, 10000)
+    },
+    desativaVerificacoesAutomaticas () {
+      if (this.$intervalVerificacoesAutomaticas) {
+        clearInterval(this.$intervalVerificacoesAutomaticas)
+      }
+    },
     /**
      * Verifica se a comunicação recebida do realtime é relacionada ao lote renderizado em tela
      * @param loteId
@@ -190,6 +239,7 @@ const Lote = {
       this.notifica && this.notifica('lance', lance)
       if (!this.isLoteComunication(loteId)) return
       this.__addLance(lance)
+      this.ativaVerificacoesAutomaticas()
     },
     /**
      * Adiciona um lance na lista de lances
@@ -202,7 +252,7 @@ const Lote = {
           this.lote.lances = []
         }
         const testFind = this.lote.lances.find(l => l.id === lance.id)
-        if (this.$arrematante && this.$arrematante.id && this.$arrematante.id !== lance.autor.id) {
+        if (this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id !== lance.autor.id) {
           this.audioNotification && this.comunicatorClass.audios.lance.play()
         }
         !testFind && this.lote.lances.unshift(lance)
@@ -261,6 +311,7 @@ const Lote = {
       if (!this.lote || this.lote.id !== data.lote.id) return
       this.lote = Object.assign({}, this.lote, data.lote)
       this.ativaTimer()
+      this.ativaVerificacoesAutomaticas()
     },
     /**
      * Altera o incremento do lote
@@ -311,6 +362,7 @@ const Lote = {
           this.ativaTimer()
         })
       }
+      this.ativaVerificacoesAutomaticas()
     },
     verificarAcoesRobo () {
       if (this.isRobo) {

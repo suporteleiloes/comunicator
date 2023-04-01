@@ -98,6 +98,23 @@ class Comunicator {
   }
 
   /**
+   * Solicita dados atualizados de um lote
+   * @param loteId
+   * @returns {Promise<>}
+   */
+  getSimpleLoteData (loteId) {
+    return new Promise((resolve, reject) => {
+      this.http.get(`/api/lotes/${loteId}/getSimpleData`)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+    });
+  }
+
+  /**
    * Deleta todos os lances de um lote
    * @param loteId
    * @returns {Promise<>}

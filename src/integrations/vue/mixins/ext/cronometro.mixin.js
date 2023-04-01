@@ -202,7 +202,7 @@ const Cronometro = {
         const diff = ultimaAtividade - now
         this.timeUltimaAtividade = diff
 
-        if (!this.isControleSimultaneo && this.lote.status < LoteStatus.STATUS_EM_PREGAO && diff < this.leilao.timerPregao) {
+        if (!this.isControleSimultaneo && this.lote.status < LoteStatus.STATUS_EM_PREGAO && (diff / 1000) < this.leilao.timerPregao) {
           this.timeUltimaAtividade = this.leilao.timerPregao * 1000
           this.hideTimer = true
           return

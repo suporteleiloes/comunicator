@@ -317,6 +317,7 @@ const Lote = {
         const timeleft = Math.round(this.timeUltimaAtividade / 1000)
         if (this.lote.status <= LoteStatus.STATUS_EM_PREGAO || this.lote.status === LoteStatus.STATUS_HOMOLOGANDO) {
           if (timeleft > 0) {
+            if (!this.isControleSimultaneo) return
             if (timeleft <= this.tempoCronometro) {
               // console.log('Lote ' + this.lote.numero, timeleft, this.tempoCronometro, Math.abs(this.tempoIntervaloPrimeiroLote))
               this.lote.status = LoteStatus.STATUS_EM_PREGAO

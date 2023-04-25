@@ -159,6 +159,18 @@ const Cronometro = {
       const cb = () => {
         let ultimaAtividade, dataLimiteLances
         const now = this.comunicatorClass && this.comunicatorClass.getServertime() ? this.comunicatorClass.getServertime() : new Date().getTime()
+
+        if (this.isVendaDireta) {
+          if (this.isCronometroSempreAtivo) {
+            ultimaAtividade = this.leilao.vendaDireta && this.leilao.dataLimitePropostas ? parseISO(this.leilao.dataLimitePropostas.date) : parseISO(this.leilao.dataProximoLeilao.date)
+            const diff = ultimaAtividade - now
+            this.timeUltimaAtividade = diff
+          } else {
+            this.desativaTimer(true)
+          }
+          return
+        }
+
         if (this.isRobo) {
           ultimaAtividade = this.lote.dataFechamento ? parseISO(this.lote.dataFechamento.date) : parseISO(this.leilao.dataProximoLeilao.date)
           if (this.lote.dataLimiteLances) {

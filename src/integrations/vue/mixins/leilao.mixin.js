@@ -72,6 +72,9 @@ const Component = {
     },
     isCronometroIncremental () {
       return this.leilao.tipoCronometro && Number(this.leilao.tipoCronometro) === 1
+    },
+    isVendaDireta () {
+      return this.leilao && this.leilao.vendaDireta
     }
   },
   mounted() {

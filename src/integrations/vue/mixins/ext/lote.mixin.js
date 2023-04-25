@@ -41,6 +41,9 @@ const Lote = {
       if (this.lote.status === null) {
         return '-'
       }
+      if (this.isVendaDireta && this.isPermitidoLance) {
+        return 'Aberto para propostas'
+      }
       if (typeof Status.StatusFake[this.lote.status] !== 'undefined') {
         return Status.StatusFake[this.lote.status].title
       }
@@ -132,6 +135,9 @@ const Lote = {
       return this.lote.lances
       // return this.lote.lances.sort((a, b) => Number(a.valor) > Number(b.valor))
     },
+    hasParcelamentoLote () {
+      return !(!this.lote || typeof this.lote.permitirParcelamento === 'undefined' || this.lote.permitirParcelamento === null)
+    },
     maximoParcelas () {
       if (!this.hasParcelamentoLote) {
         return this.leilao.parcelamentoQtdParcelas
@@ -191,6 +197,8 @@ const Lote = {
          */
           if (this.ultimoLance && this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id === this.ultimoLance.autor.id) {
             console.log('== Rotinas automáticas do lote ', this.lote ? this.lote.id : null)
+            return
+            // @TODO: Buscar no servidor de estatísticas / cache
             this.comunicatorClass.getSimpleLoteData(this.lote.id)
                 .then((response) => {
                   const lt = response.data

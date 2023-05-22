@@ -8,6 +8,7 @@ export const STATUS_SEM_LICITANTES = 8
 export const STATUS_BAIXA_OFERTA = 9
 export const STATUS_RETIRADO = 10
 export const STATUS_CANCELADO = 11
+export const STATUS_PREJUDICADO = 12
 
 export const STATUS_FAKE_DOULHE_UMA = 10001
 export const STATUS_FAKE_DOULHE_DUAS = 10002
@@ -26,7 +27,8 @@ export const Status = {
   [STATUS_SEM_LICITANTES]: {title: 'Sem licitantes', class: 'lote-status-' + STATUS_SEM_LICITANTES},
   [STATUS_BAIXA_OFERTA]: {title: 'Baixa oferta', class: 'lote-status-' + STATUS_BAIXA_OFERTA},
   [STATUS_RETIRADO]: {title: 'Retirado', class: 'lote-status-' + STATUS_RETIRADO},
-  [STATUS_CANCELADO]: {title: 'Cancelado', class: 'lote-status-' + STATUS_CANCELADO}
+  [STATUS_CANCELADO]: {title: 'Cancelado', class: 'lote-status-' + STATUS_CANCELADO},
+  [STATUS_PREJUDICADO]: {title: 'Prejudicado', class: 'lote-status-' + STATUS_PREJUDICADO}
 }
 
 export const StatusFake = {
@@ -47,6 +49,7 @@ export default {
   STATUS_BAIXA_OFERTA,
   STATUS_RETIRADO,
   STATUS_CANCELADO,
+  STATUS_PREJUDICADO,
   STATUS_QUE_PRECISA_DE_LANCES,
   Status,
   StatusFake

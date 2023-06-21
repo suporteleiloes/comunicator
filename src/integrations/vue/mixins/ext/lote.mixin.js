@@ -186,6 +186,7 @@ const Lote = {
       }
       this.desativaVerificacoesAutomaticas()
       if (!pass) return
+      let _time = Math.floor(Math.random() * (15000 - 10000 + 1)) + 10000
       this.$intervalVerificacoesAutomaticas = setInterval(() => {
         if (this.lote.status > LoteStatus.STATUS_EM_PREGAO){
           this.desativaVerificacoesAutomaticas()
@@ -197,7 +198,7 @@ const Lote = {
          */
           if (this.ultimoLance && this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id === this.ultimoLance.autor.id) {
             console.log('== Rotinas automáticas do lote ', this.lote ? this.lote.id : null)
-            return
+            // return
             // @TODO: Buscar no servidor de estatísticas / cache
             this.comunicatorClass.getSimpleLoteData(this.lote.id)
                 .then((response) => {
@@ -220,7 +221,7 @@ const Lote = {
                   this.erroSincroniaLoteApi && this.erroSincroniaLoteApi(error)
                 })
           }
-      }, 10000)
+      }, _time)
     },
     desativaVerificacoesAutomaticas () {
       if (this.$intervalVerificacoesAutomaticas) {

@@ -211,6 +211,9 @@ const Lote = {
                     console.error('ID do lote não bate')
                     return
                   }
+                  if (lt.status !== this.lote.status) {
+                    this.lote.status = lt.status
+                  }
                   if (!lt.ultimoLance || !lt.ultimoLance.length) {
                     // todo?
                     return

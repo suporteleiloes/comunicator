@@ -196,7 +196,11 @@ const Lote = {
          * Verifica se o lance vencedor atual é do usuário, se sim, verifica se houve mais algum lance
          * Prevenção para evitar falha de conexão e consequentemente perda de transmissões do Websocket
          */
-          if (this.ultimoLance && this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id === this.ultimoLance.autor.id) {
+        const timeleft = Math.round(this.timeUltimaAtividade / 1000)
+          if (timeleft < 0 || (this.ultimoLance && this.$user && this.$user.arrematante && this.$user.arrematante.id && this.$user.arrematante.id === this.ultimoLance.autor.id)) {
+            if (timeleft < 0) {
+              console.log('!!!! TIME LEFT LOTE', this.loteNumero, timeleft)
+            }
             console.log('== Rotinas automáticas do lote ', this.lote ? this.lote.id : null)
             // return
             // @TODO: Buscar no servidor de estatísticas / cache

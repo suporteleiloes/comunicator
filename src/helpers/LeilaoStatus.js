@@ -3,7 +3,6 @@ export const STATUS_EM_BREVE = 1
 export const STATUS_EM_LOTEAMENTO = 2
 export const STATUS_ABERTO_PARA_LANCES = 3
 export const STATUS_EM_LEILAO = 4
-export const STATUS_REPASSE = 30
 export const STATUS_CANCELADO = 96
 export const STATUS_ADIADO = 97
 export const STATUS_SUSPENSO = 98
@@ -15,7 +14,7 @@ export const STATUS_INTERNO_EM_LEILAO = 2
 export const STATUS_INTERNO_EM_RECEBIMENTO = 3
 export const STATUS_INTERNO_ENCERRADO = 100
 
-export const LIST_STATUS_PERMITIDO_LANCE = [3, 4, 30]
+export const LIST_STATUS_PERMITIDO_LANCE = [3, 4]
 
 export const Status = {
   [STATUS_RASCUNHO]: {title: 'Rascunho', class: 'leilao-status-' + STATUS_RASCUNHO},
@@ -23,7 +22,6 @@ export const Status = {
   [STATUS_EM_LOTEAMENTO]: {title: 'Em loteamento', class: 'leilao-status-' + STATUS_EM_LOTEAMENTO},
   [STATUS_ABERTO_PARA_LANCES]: {title: 'Aberto para lances', class: 'leilao-status-' + STATUS_ABERTO_PARA_LANCES},
   [STATUS_EM_LEILAO]: {title: 'Em leilão', class: 'leilao-status-' + STATUS_EM_LEILAO},
-  [STATUS_REPASSE]: {title: 'Repasse', class: 'leilao-status-' + STATUS_REPASSE},
   [STATUS_ENCERRADO]: {title: 'Finalizado', class: 'leilao-status-' + STATUS_ENCERRADO},
   [STATUS_CANCELADO]: {title: 'Cancelado', class: 'leilao-status-' + STATUS_CANCELADO},
   [STATUS_ADIADO]: {title: 'Adiado', class: 'leilao-status-' + STATUS_ADIADO},

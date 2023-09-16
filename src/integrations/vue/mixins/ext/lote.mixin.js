@@ -29,7 +29,8 @@ const Lote = {
       return Number(this.lote.status) === Status.STATUS_EM_PREGAO
     },
     isPermitidoLance () {
-      return Number(this.lote.status) === Status.STATUS_ABERTO_PARA_LANCES || Number(this.lote.status) === Status.STATUS_EM_PREGAO || Number(this.lote.status) > 10000
+      const s = Number(this.lote.status)
+      return [Status.STATUS_ABERTO_PARA_LANCES, Status.STATUS_EM_PREGAO, Status.STATUS_REPASSE].includes(s) || s > 10000
     },
     isPermitidoLanceParcelado () {
       return this.leilao.permitirParcelamento && this.lote.permitirParcelamento

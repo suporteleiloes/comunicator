@@ -26,7 +26,7 @@ const Mixin = {
               console.log(error)
               this.audioNotification && this.comunicatorClass.audios.err.play()
               this.callbackLanceFalha && this.callbackLanceFalha(error)
-              this.statLanceError && this.statLanceError(response)
+              this.statLanceError && this.statLanceError(error)
               reject(error)
             })
       })

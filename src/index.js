@@ -14,7 +14,8 @@ class Comunicator {
     this.comunicator = comunicator;
     this.http = axiosInstance
     this.audios = audios
-    this.servertime = null
+    this.servertime = (new Date()).getTime()
+    this.servertimeSyncError = false
     this.localtime = (new Date()).getTime()
     this.servertimeSync()
     this.servertimeSyncInterval = setInterval(() => {
@@ -28,21 +29,22 @@ class Comunicator {
    * @param leilaoId
    * @returns {Promise<>}
    */
-  servertimeSync (leilaoId = null) {
+  servertimeSync (timezone = null) {
     let serverTime = 0
     let startTime = new Date().getTime()
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      this.http.get(`/api/public/servertime?leilao=${leilaoId || ''}`, {
+      this.http.get('https://worldtimeapi.org/api/timezone/America/Sao_Paulo', {
         transformRequest: [function (data, headers) {
           if (headers && headers.common && headers.common.Authorization) {
             delete headers.common.Authorization
           }
           return data;
-        }]
+        }],
+        timeout: 5000
       })
         .then(response => {
-          let responseServertime = response.data.time
+          let responseServertime = response.data.datetime
           this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
           let actualTime = this.localtime = new Date().getTime()
           diffTime = actualTime - startTime
@@ -55,8 +57,13 @@ class Comunicator {
         })
         .catch(error => {
           serverTime = 0
+          this.servertime = (new Date()).getTime()
+          let actualTime = this.localtime = new Date().getTime()
+          diffTime = actualTime - startTime
+          this.servertime = this.servertime + diffTime
+          this.servertimeSyncError = true
           if (typeof alert !== 'undefined') {
-            // alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lantes imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
+            // alert('Não conseguimos sincronizar com o horário do servidor, seu cronômetro pode ter alguma inconsistência, mas você poderá dar lances normalmente, mas não confie no cronômetro e continue dando lances imediatamente após algum outro lance cobrir o seu, ou atualize a página para tentar sincronizar com o horário do servidor.')
           }
           console.error(error)
           reject(error)

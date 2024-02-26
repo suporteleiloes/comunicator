@@ -17,7 +17,9 @@ class Comunicator {
     this.servertime = (new Date()).getTime()
     this.servertimeSyncError = false
     this.localtime = (new Date()).getTime()
-    this.servertimeSync()
+    try {
+      this.servertimeSync()
+    } catch (e) {}
     this.servertimeSyncInterval = setInterval(() => {
       console.log('Sincronizando hora com o servidor')
       this.servertimeSync()
@@ -41,6 +43,9 @@ class Comunicator {
           }
           return data;
         }],
+        headers: {
+          origin: 'https://localhost:8080'
+        },
         timeout: 5000
       })
         .then(response => {

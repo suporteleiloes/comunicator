@@ -43,22 +43,23 @@ class Comunicator {
           }
           return data;
         }],
-        headers: {
-          origin: 'https://localhost:8080'
-        },
         timeout: 5000
       })
         .then(response => {
-          let responseServertime = response.data.datetime
-          this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
-          let actualTime = this.localtime = new Date().getTime()
-          diffTime = actualTime - startTime
-          this.servertime = this.servertime + diffTime
-          console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
-          console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
-          console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
-          console.log('A hora atual do servidor é: ' + new Date(this.servertime))
-          resolve(response)
+          if (response && response.data && response.data.datetime) {
+            let responseServertime = response.data.datetime
+            this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
+            let actualTime = this.localtime = new Date().getTime()
+            diffTime = actualTime - startTime
+            this.servertime = this.servertime + diffTime
+            console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
+            console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
+            console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
+            console.log('A hora atual do servidor é: ' + new Date(this.servertime))
+            resolve(response)
+          } else {
+            reject(response)
+          }
         })
         .catch(error => {
           serverTime = 0

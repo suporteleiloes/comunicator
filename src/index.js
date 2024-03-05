@@ -52,10 +52,12 @@ class Comunicator {
             let actualTime = this.localtime = new Date().getTime()
             diffTime = actualTime - startTime
             this.servertime = this.servertime + diffTime
+            let dtinstance = this.getDateInstance()
+            this.servertime = dtinstance.getTime()
             console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
             console.log('Encerrou a requisição da hora do servidor em: ' + new Date(actualTime))
             console.log('O sistema levou ' + diffTime + ' milisegundos para carregar o timestamp do servidor')
-            console.log('A hora atual do servidor é: ' + new Date(this.servertime))
+            console.log('A hora atual do servidor é: ' + this.getDateInstance())
             resolve(response)
           } else {
             reject(response)
@@ -84,6 +86,19 @@ class Comunicator {
     let now = new Date().getTime()
     let tempoPercorrido = now - this.localtime
     return this.servertime + tempoPercorrido
+  }
+
+  getDateInstance () {
+      let date = new Date(this.getServertime())
+      try {
+          let timezone = date.getTimezoneOffset()
+          if (timezone > 180) {
+              date.setHours(date.getHours() + ((timezone - 180) / 60));
+          } else if (timezone < 180) {
+              date.setHours(date.getHours() - ((180 - timezone) / 60));
+          }
+      } catch (e) {}
+      return date
   }
 
   /**

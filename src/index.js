@@ -51,10 +51,10 @@ class Comunicator {
             let responseServertime = response.data.datetime
             this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
             //let actualTime = this.localtime = new Date().getTime()
-            let actualTime =  new Date().getTime()
+            let actualTime = this.startServertime =  new Date().getTime()
             diffTime = actualTime - startTime
             //this.localtime = this.localtime + diffTime
-            this.servertime = this.startServertime = this.servertime + diffTime
+            this.servertime = this.servertime + diffTime
             // let dtinstance = this.getDateInstance()
             // this.servertime = dtinstance.getTime()
             console.log('Iniciou a requisição da hora do servidor em: ' + new Date(startTime))
@@ -67,6 +67,7 @@ class Comunicator {
           }
         })
         .catch(error => {
+          console.log('\x1b[31m\x1b[1m%s\x1b[0m', 'Erro ao carregar o timestamp do servidor. Utilizando o cronômetro local.')
           serverTime = 0
           this.servertime = (new Date()).getTime()
           let actualTime = new Date().getTime()

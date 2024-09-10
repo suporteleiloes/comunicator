@@ -37,7 +37,7 @@ class Comunicator {
     let startTime = new Date().getTime()
     let diffTime = 0
     return new Promise((resolve, reject) => {
-      this.http.get('https://worldtimeapi.org/api/timezone/America/Sao_Paulo', {
+      this.http.get('https://api-sc4.suporteleiloes.com/api/public/servertime', {
         transformRequest: [function (data, headers) {
           if (headers && headers.common && headers.common.Authorization) {
             delete headers.common.Authorization
@@ -47,8 +47,8 @@ class Comunicator {
         timeout: 10000
       })
         .then(response => {
-          if (response && response.data && response.data.datetime) {
-            let responseServertime = response.data.datetime
+          if (response && response.data && response.data.time) {
+            let responseServertime = response.data.time
             this.servertime = Date.parse(responseServertime.toString().replace(/ /g, 'T'))
             //let actualTime = this.localtime = new Date().getTime()
             let actualTime = this.startServertime =  new Date().getTime()

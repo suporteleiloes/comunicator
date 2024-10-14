@@ -15,18 +15,24 @@ const Mixin = {
      * Is necessary to exists comunicator and comunicatorClass in the context
      */
     bindEvents () {
-      if (!this.isBinded) {
-        events.map(e => {
-          let callback
-          if (typeof this['on' + e.charAt(0).toUpperCase() + e.slice(1)] !== 'undefined'){
-            callback = this['on' + e.charAt(0).toUpperCase() + e.slice(1)]
-          } else {
-            callback = this.genericOn
-          }
-          this.comunicator && this.comunicator.on(e, callback)
-        })
-        this.sBinded = true
+      const fcn = () => {
+        if (!this.comunicator) return
+        if (!this.isBinded) {
+          events.map(e => {
+            let callback
+            if (typeof this['on' + e.charAt(0).toUpperCase() + e.slice(1)] !== 'undefined') {
+              callback = this['on' + e.charAt(0).toUpperCase() + e.slice(1)]
+            } else {
+              callback = this.genericOn
+            }
+            this.comunicator.on(e, callback)
+          })
+          this.sBinded = true
+        }
+        this.$intervalBindId && clearInterval(this.$intervalBindId)
       }
+      this.$intervalBindId = setInterval(fcn, 500)
+      fcn()
     },
     unbindEvents () {
       events.map(e => {

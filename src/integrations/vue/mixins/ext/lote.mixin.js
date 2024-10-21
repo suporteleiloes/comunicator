@@ -95,6 +95,10 @@ const Lote = {
     },
     valorAtual () {
       if (!this.ultimoLance) {
+        const valorLanceAtual = Number(this.lote.valorLanceAtual)
+        if (!isNaN(valorLanceAtual) && valorLanceAtual > 0) {
+          return valorLanceAtual
+        }
         if (!this.valorInicialAtual) {
           return 0
         }
@@ -117,6 +121,9 @@ const Lote = {
     lanceMinimo () {
       if (this.ultimoLance) {
         return Number(this.ultimoLance.valor) + Number(this.lote.valorIncremento)
+      }
+      if (this.valorAtual) {
+        return Number(this.valorAtual) + Number(this.lote.valorIncremento)
       }
       if (!this.lote.valorInicial) {
         if (this.lote.valorIncremento) {
@@ -170,6 +177,15 @@ const Lote = {
     },
     lanceParceladoError () {
       return Number(this.lanceParceladoEntrada) < this.lanceParceladoEntradaMinima
+    },
+    isPermiteParcelamento () {
+      if (this.lote.permitirParcelamento === false) {
+        return false
+      }
+      if (this.leilao.permitirParcelamento === false) {
+        return false
+      }
+      return true
     }
   },
   mounted () {
@@ -255,6 +271,13 @@ const Lote = {
     __parseLance (loteId, lance) {
       this.notifica && this.notifica('lance', lance)
       if (!this.isLoteComunication(loteId)) return
+      try {
+        this.lote.valorLanceAtual = lance.valor
+        this.lote.totalLances = lance.lote.totalLances
+        this.lote.lanceAtual = {autor: lance.autor}
+      } catch (e) {
+          console.error(e)
+      }
       this.__addLance(lance)
       this.ativaVerificacoesAutomaticas()
     },
@@ -290,12 +313,20 @@ const Lote = {
      * Remove um lance
      * @param loteId
      * @param lanceId
+     * @param data
      * @private
      */
-    __removeLance (loteId, lanceId) {
+    __removeLance (loteId, lanceId, data) {
       if (!this.isLoteComunication(loteId)) return
-      const lance = this.lote.lances.find(lance => lance.id === lanceId)
-      lance && this.lote.lances.splice(this.lote.lances.indexOf(lance), 1)
+        if (this.lote.lances) {
+            const lanceIndex = this.lote.lances.findIndex(lance => lance.id === lanceId)
+            lanceIndex !== -1 && this.lote.lances.splice(lanceIndex, 1)
+        }
+        if (data) {
+            this.lote.lanceAtual = data.lote.lanceAtual || null
+            this.lote.valorLanceAtual = data.lote.valorLanceAtual || null
+            this.lote.totalLances = data.lote.totalLances || 0
+        }
     },
     /**
      * Remove todos os lances

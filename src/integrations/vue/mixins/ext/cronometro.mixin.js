@@ -191,6 +191,9 @@ const Cronometro = {
             }
             // console.log('!!! TEM PREGÃO: ', pregao)
             ultimaAtividade = parseISO(pregao.dataAbertura.date)
+            //console.log('ULTIMO ATIVIDADE', ultimaAtividade)
+            //console.log('PREGAO', pregao)
+            //console.log('TEMPO', this.tempoCronometro)
             ultimaAtividade = add(ultimaAtividade, {seconds: (this.tempoCronometro)})
           }
         }
@@ -235,7 +238,7 @@ const Cronometro = {
       this.timeUltimaAtividade = null
       this.timeLimite = null
       if (this.$intervalCronometro) {
-        console.log('Intervalo existe')
+        //console.log('Intervalo existe')
         clearInterval(this.$intervalCronometro)
       }
     }

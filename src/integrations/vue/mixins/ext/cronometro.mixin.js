@@ -94,7 +94,7 @@ const Cronometro = {
   },
   mounted () {
     this.$nextTick(() => {
-      if ((this.isCronometroSempreAtivo && this.leilao.status <=  StatusLeilao.STATUS_EM_LEILAO) || (this.lote && this.lote.status < 5)) {
+      if ((this.isCronometroSempreAtivo && this.leilao.status <= StatusLeilao.STATUS_EM_LEILAO) || (this.lote && this.lote.status < 5)) {
         this.ativaTimer()
       }
     })

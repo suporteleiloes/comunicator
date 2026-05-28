@@ -1,4 +1,23 @@
 /* eslint-disable */
+/**
+ * Actions — catálogo canônico de eventos WS que o realtime-service entende.
+ *
+ * AUDIT 2026-05-27: 8 eventos abaixo foram identificados como dead-code
+ * backend (api-v2 V5 NÃO os emite — auditoria em `v5/CONTRATOS-WS.md` §3).
+ * Mantidos como NO-OP (DEPRECATED) pra que componentes que ainda fazem
+ * `on<NomeDoEvento>` no mixin não quebrem:
+ *
+ *   - renovarCronometro        → use 'alteracaoCronometroLote' / 'alteracaoCronometroLeilao'
+ *   - pausaLeilao              → use 'statusLeilao' (status=98 SUSPENSO)
+ *   - retomarLeilao            → use 'statusLeilao' (status=4 EM_LEILAO)
+ *   - avisoAuditorioVirtual    → use 'comando' c/ comando=='mensagem'
+ *   - alteracaoStatusUsuario   → sem substituto; planejado pra `presence.update`
+ *   - onMessageReceive         → use 'chat:message:new' (CRM)
+ *   - onLogin / onLogout       → sem substituto; planejado pra `presence.update`
+ *
+ * Quando remover: após confirmar (grep nas apps consumidoras) que ninguém
+ * mais implementa `on<NomeDoEvento>` ou `__<nomeDoEvento>` correspondente.
+ */
 const Actions = {
 
   /**
@@ -93,21 +112,14 @@ const Actions = {
   },
 
   /**
-   * Quando o controlador renova o cronômetro do lote.
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  leilao: {Integer}
-   *  lote: {
-   *    id: {Integer}
-   *    status: {Integer}
-   *    tempo: {Integer}
-   *  }
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * api-v2 V5 NUNCA emite `renovarCronometro`. O comando do controlador
+   * (POST `/api/cmd/lotes/{id}/renovarCronometro`) chama internamente
+   * `mudarStatusLote(STATUS_EM_PREGAO)` que emite `statusLote`.
+   * Escute `alteracaoCronometroLote` ou `statusLote` ao invés.
    */
-  renovarCronometro: (data) => {
-    return data;
+  renovarCronometro: (_data) => {
+    return null;
   },
 
   /**
@@ -184,46 +196,29 @@ const Actions = {
   },
 
   /**
-   * Quando o leilão é temporariamente pausado
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  leilao: {Integer}
-   *  motivo: {String}
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Comando outgoing `/api/cmd/leiloes/X/pausar` existe, mas não emite
+   * evento WS. Use `statusLeilao` (status=98 SUSPENSO) como gatilho.
    */
-  pausaLeilao: (data) => {
-    return data;
+  pausaLeilao: (_data) => {
+    return null;
   },
 
   /**
-   * Quando o leilão é retomado
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  leilao: {Integer}
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Idem `pausaLeilao` — use `statusLeilao` (status=4 EM_LEILAO).
    */
-  retomarLeilao: (data) => {
-    return data;
+  retomarLeilao: (_data) => {
+    return null;
   },
 
   /**
-   * Quando recebe um aviso em um ou todos os auditórios virtual
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  leilao: {Integer},
-   *  usuario: {Interger}
-   *  mensagem: {String},
-   *  type: {String} info,alert,danger,positive
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Comando outgoing `/api/cmd/leiloes/aviso` cai em `comando.mensagem`
+   * (wrapper 'comando' com `comando=='mensagem'`). Use esse handler.
    */
-  avisoAuditorioVirtual: (data) => {
-    return data;
+  avisoAuditorioVirtual: (_data) => {
+    return null;
   },
 
   /**
@@ -293,90 +288,69 @@ const Actions = {
   },
 
   /**
-   * Quando o status de um usuário é alterado
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  usuario: {Integer}
-   *  status: {Integer}
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Comando outgoing `/api/cmd/notificacao/alteracaoStatusUsuario` existe
+   * mas sem emitter. Métricas de presença planejadas pra futuro
+   * `presence.update` (gateway v2 §4.11 do CONTRATOS-WS).
    */
-  alteracaoStatusUsuario: (data) => {
-    return data;
+  alteracaoStatusUsuario: (_data) => {
+    return null;
   },
 
   /**
-   * Quando um usuário recebe uma mensagem
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  from: {
-   *    id: {Integer},
-   *    username: {String},
-   *    name: {String},
-   *  },
-   *  to: {
-   *    id: {Integer},
-   *    username: {String},
-   *    name: {String},
-   *  }
-   *  subject: {String},
-   *  message: {String},
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Substituído por `chat:message:new` (Console CRM). Ver §2.22 do CONTRATOS-WS.
    */
-  onMessageReceive: (data) => {
-    return data;
+  onMessageReceive: (_data) => {
+    return null;
   },
 
   /**
-   * Quando um usuário faz login ou entra em uma tela específica
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  user: {Integer}
-   *  type: {String} (login|screen)
-   *  screen: {String},
-   *  date: {Datetime}
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend.
+   * Métricas de presença planejadas, não implementadas. Futuro:
+   * `presence.update` (§4.11 do CONTRATOS-WS).
    */
-  onLogin: (data) => {
-    return data;
+  onLogin: (_data) => {
+    return null;
   },
 
   /**
-   * Quando um usuário faz logout ou sai de uma tela específica
-   * @param data
-   * @return {Object|null}
-   * Sample:
-   * {
-   *  user: {Integer}
-   *  type: {String} (login|screen)
-   *  screen: {String},
-   *  date: {Datetime},
-   *  reason: {String}
-   * }
+   * @deprecated 2026-05-27 — DEAD-CODE backend. Idem `onLogin`.
    */
-  onLogout: (data) => {
-    return data;
+  onLogout: (_data) => {
+    return null;
   },
 
   /**
    * Quando um comitente toma uma decisão de aprovar, rejeitar ou condicionar um lance em um determinado lote.
+   *
+   * Nome canônico do evento no backend (api-v2 + gateway v2): `lote.aprovacao`.
+   * Aliases legados aceitos durante a migração (~2 semanas): `aprovacao-lote`
+   * (nome original emitido pelo `AprovacaoLoteEvent.php`) e `comitenteDecisaoStatusLote`
+   * (este). Após a migração, manter SÓ `lote.aprovacao`.
+   *
+   * Histórico do bug: antes de 2026-05-27, o backend emitia `aprovacao-lote`
+   * mas o cliente escutava `comitenteDecisaoStatusLote` — o evento NUNCA chegava
+   * ao handler. Hoje o gateway normaliza ambos pro nome canônico e a API
+   * V5 também emite o canônico diretamente.
+   *
    * @param data
    * @return {Object|null}
    * Sample:
    * {
    *  leilao: {Integer}
-   *  lote: {
-   *    id: {Integer}
-   *    status: {Integer}
-   *  },
-   *  mensagem: {String}
+   *  lote: {Integer}
+   *  status: {Integer}
+   *  numero: {String|Integer}
+   * }
    */
   comitenteDecisaoStatusLote: (data) => {
+    return data;
+  },
+  'lote.aprovacao': (data) => {
+    return data;
+  },
+  'aprovacao-lote': (data) => {
     return data;
   },
 
